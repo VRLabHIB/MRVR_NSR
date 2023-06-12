@@ -14,18 +14,21 @@ if __name__ == '__main__':
 
     save_path = project_path + "\\results\\"
 
-    prep_quest = P002.Preprocessing(data_path)
-    df_q = prep_quest.get_dataframe()
+    ### Preprocess questionnaire ###
+    #prep_quest = P002.Preprocessing(data_path)
+    #prep_quest.refactor_and_select_columns()
+    #prep_quest.save_dataframe()
 
-    prep_exp = P001.Preprocessing(data_path)
-    #prep_exp.add_experiment_condition()
-    #prep_exp.set_stimulus_and_timing()
-    #prep_exp.drop_unused_variables()
+    ### Preprocess experiment data ###
+    prep_exp = P001.Preprocessing(data_path, location = '\\0_raw_experiment\\')
+    #prep_exp.data_cleaning()
+    #dfs = prep_exp.get_dataframes()
 
-    #data_lst = prep_exp.get_data_lst()
-    #dataframes = prep_exp.get_dataframes()
+    # First Cleaning
+    save_path_step0 = data_path + '\\1_first_cleaning_experiment\\'
+    #prep_exp.save_dataframes(save_path_step0)
+    print('Hello')
 
-    #for i in range(len(data_lst)):
-    #    name = data_lst[i]
-    #    df = dataframes[i]
-    #    df.to_csv(name, index=False)
+
+    prep_exp = P001.Preprocessing(data_path, location='\\1_first_cleaning_experiment\\')
+    dfs = prep_exp.get_dataframes()
