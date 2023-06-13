@@ -31,6 +31,7 @@ Preprocessing is an object class holding all dataframes to processing. Getter fu
 - Used the pupil diameter values of both eyes as an idicator of the Eye Trackers tracking ratio. Sessions with an average 
   tracking ratio below 80% during the experiment part were removed from the sample. 
 - Since we always wanted to compare both conditions (2D and 3D) for each participant, sessions had to be removed in which only one of the two conditions showed a low tracking ratio.
+- As a result 54 participants remained for the analysis, 12 had to be removed because either one or both conditions did not met the required threshold.  
 
 **calculate_and_process_variables**
 - 
