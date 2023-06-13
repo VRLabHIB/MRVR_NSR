@@ -1,9 +1,10 @@
 import os
 from datetime import datetime
 import pandas as pd
-import warnings
 
-warnings.filterwarnings('ignore')
+# import warnings
+# warnings.filterwarnings('ignore')
+
 import numpy as np
 import glob
 
@@ -160,7 +161,7 @@ class Preprocessing:
             self.dataframes[i + 1] = df2
 
     def process_pupil(self):
-        self.df_tr = pd.DataFrame({'name': [], 'tr_left': [], 'tr_right': []})
+        self.df_tr = pd.DataFrame({'name': [], 'left_tr': [], 'right_tr': []})
 
         for file in range(0, len(self.dataframes)):
             df = self.dataframes[file]
@@ -181,16 +182,19 @@ class Preprocessing:
 
                 if np.isnan(df['left.pupil_diameter_clean'].iloc[i]):
                     idx_s = i
-                    i += 1
 
-                    while np.logical_and(np.isnan(df['left.pupil_diameter_clean'].iloc[i]), i < len(df)):
+                    while np.logical_and(np.isnan(df['left.pupil_diameter_clean'].iloc[i]), i < len(df)-1):
                         i += 1
 
                     idx_e = i + 1
-                    dur = df['time'].iloc[idx_e] - df['time'].iloc[idx_s]
-                    if dur < 0.5:
-                        df['left.pupil_diameter_clean'].iloc[idx_s - 1:idx_e] = np.nan
-
+                    if idx_e < len(df):
+                        dur = df['time'].iloc[idx_e] - df['time'].iloc[idx_s]
+                        if dur < 0.5:
+                            df['left.pupil_diameter_clean'].iloc[idx_s - 1:idx_e] = np.nan
+                    if idx_e >= len(df):
+                        dur = df['time'].iloc[idx_e-1] - df['time'].iloc[idx_s]
+                        if dur < 0.5:
+                            df['left.pupil_diameter_clean'].iloc[idx_s - 1:idx_e-1] = np.nan
                 i += 1
 
             i = 0
@@ -200,21 +204,28 @@ class Preprocessing:
 
                 if np.isnan(df['right.pupil_diameter_clean'].iloc[i]):
                     idx_s = i
-                    i += 1
 
-                    while np.logical_and(np.isnan(df['right.pupil_diameter_clean'].iloc[i]), i < len(df)):
+                    while np.logical_and(np.isnan(df['right.pupil_diameter_clean'].iloc[i]), i < len(df)-1):
                         i += 1
 
                     idx_e = i + 1
-                    dur = df['time'].iloc[idx_e] - df['time'].iloc[idx_s]
-                    if dur < 0.5:
-                        df['right.pupil_diameter_clean'].iloc[idx_s - 1:idx_e] = np.nan
+                    if idx_e < len(df):
+                        dur = df['time'].iloc[idx_e] - df['time'].iloc[idx_s]
+                        if dur < 0.5:
+                            df['right.pupil_diameter_clean'].iloc[idx_s - 1:idx_e] = np.nan
+                    if idx_e >= len(df):
+                        dur = df['time'].iloc[idx_e-1] - df['time'].iloc[idx_s]
+                        if dur < 0.5:
+                            df['right.pupil_diameter_clean'].iloc[idx_s - 1:idx_e-1] = np.nan
 
                 i += 1
 
             # Combined pupil diameter
-            df['combined.pupil_diameter_clean'] = np.mean(
-                df[['left.pupil_diameter_clean', 'right.pupil_diameter_clean']], axis=1)
+            combined = np.mean(df[['left.pupil_diameter_clean', 'right.pupil_diameter_clean']], axis=1)
+            print('len of combined ', len(combined))
+            print('len of data ', len(df))
+
+            df['combined.pupil_diameter_clean'] = combined
 
             # Baseline correction
             df['combined.pupil_diameter_corr'] = np.nan
@@ -240,14 +251,39 @@ class Preprocessing:
             self.dataframes[file] = df
 
     def select_cases_on_tracking_ratio(self, valid_path, invalid_path):
-        for file in range(0, len(self.dataframes)):
-            df = self.dataframes[file]
-            name = self.data_lst[file]
-            print(name)
+        for file in range(0, len(self.dataframes), 2):
+            df1 = self.dataframes[file]
+            name1 = self.data_lst[file]
+            print(self.data_lst[file])
+            df2 = self.dataframes[file+1]
+            name2 = self.data_lst[file+1]
+            print(self.data_lst[file + 1])
+            if df1['ID'].iloc[0] == df2['ID'].iloc[0]:
+                print('same id')
+            else:
+                print('not same id')
+            print(' ')
 
-            trs = self.df_tr[self.df_tr['name'] == name]
+            trs1 = self.df_tr[self.df_tr['name'] == name1]
+            tr_avg1 = (trs1['left_tr'].values + trs1['right_tr'].values) / 2
 
-            # TODO select files according to TR
+            trs2 = self.df_tr[self.df_tr['name'] == name2]
+            tr_avg2 = (trs2['left_tr'].values + trs2['right_tr'].values) / 2
+
+            if np.logical_and(tr_avg1 >= 80, tr_avg2 >= 80):
+                print('\nTracking ratio sufficient:')
+                print('tr avg1: ', tr_avg1)
+                print('tr avg2: ', tr_avg2)
+                df1.to_csv(valid_path + '{}'.format(name1), index=False)
+                df2.to_csv(valid_path + '{}'.format(name2), index=False)
+
+            if np.logical_or(tr_avg1 < 80, tr_avg2 < 80):
+                print('\nTracking ratio NOT sufficient:')
+                print('tr avg1: ', tr_avg1)
+                print('tr avg2: ', tr_avg2)
+                df1.to_csv(invalid_path + '{}'.format(name1), index=False)
+                df2.to_csv(invalid_path + '{}'.format(name2), index=False)
+
 
     def calculate_and_process_variables(self):
         for file in range(0, len(self.dataframes)):
@@ -257,8 +293,20 @@ class Preprocessing:
 
             # Variable created: time_diff
             df['time_diff'] = calculate_time_diff(df, 'time')
+            df['hitobject'] = object_validation(df, 'combined.pupil_diameter_corr', 'rayhitcomponent')
 
-            # TODO add further variables
+            df['head_x'], df['head_y'], df['head_z'] = get_head_direction(df,'playerrotationRoll','playerrotationPitch','playerrotationYaw')
+
+            angledir = get_angle(df,'combined.pupil_diameter_corr', 'combined.gaze_direction_normalized.X',
+                                    'combined.gaze_direction_normalized.Y',
+                                    'combined.gaze_direction_normalized.Z',
+                                    'head_x',
+                                    'head_y',
+                                    'head_z')
+
+            df['head_angle'] = angledir[1]
+            df['gaze_angle'] = angledir[0]
+
             self.dataframes[file] = df
 
 
@@ -312,6 +360,39 @@ def calculate_time_diff(df, time):
 
     return time_diff
 
+def object_validation(df, combined_pupil, hitcomponent):
+    """
+
+    Parameters
+    ----------
+    df : pandas dataframe
+        raw, cleaned dataframe.
+    left_pupil : string
+        preprocessed variable with left pupil diameter information [mm].
+    right_pupil : string
+        preprocessed variable with right pupil diameter information [mm].
+    hitcomponent : string
+        column name with objects looked at.
+
+    Returns
+    -------
+    hitobject : list
+        preprocessed list of objects looked at.
+
+    """
+
+    hitobject = list()
+
+    for i in range(len(df)):
+        if np.isnan(df[combined_pupil].iloc[i]):
+            hitobject.append('NaN')
+        else:
+            hitobject.append(df[hitcomponent].iloc[i].split(' ')[-1])
+            if hitobject[i] == "partitionwall" or hitobject[i] == "Lockers_02_A_SM":
+                hitobject[i] = "wall"
+            else:
+                hitobject[i] = hitobject[i].split('.')[-1]
+    return hitobject
 
 def get_head_direction(df, roll, pitch, yaw):
     """
@@ -364,7 +445,7 @@ def get_head_direction(df, roll, pitch, yaw):
     return headX, headY, headZ
 
 
-def get_angle(df, gazeX, gazeY, gazeZ, headX, headY, headZ):
+def get_angle(df,combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
     """
 
     Parameters
@@ -394,9 +475,13 @@ def get_angle(df, gazeX, gazeY, gazeZ, headX, headY, headZ):
     """
 
     # for gaze angle
-    df[gazeX] = df[gazeX].replace(-1, np.nan)
-    df[gazeY] = df[gazeY].replace(-1, np.nan)
-    df[gazeZ] = df[gazeZ].replace(-1, np.nan)
+    #df[gazeX] = df[gazeX].replace(-1, np.nan)
+    #df[gazeY] = df[gazeY].replace(-1, np.nan)
+    #df[gazeZ] = df[gazeZ].replace(-1, np.nan)
+
+    df[gazeX] = np.where(df[combined_pupil].isna(), np.nan, df[gazeX])
+    df[gazeY] = np.where(df[combined_pupil].isna(), np.nan, df[gazeY])
+    df[gazeZ] = np.where(df[combined_pupil].isna(), np.nan, df[gazeZ])
 
     m_t1 = np.array(df[[gazeX, gazeY, gazeZ]].iloc[1:])  # array starts at t1 until tn; converted into matrix
     m_t0 = np.array(df[[gazeX, gazeY, gazeZ]].iloc[:-1])  # array starts at t0 until tn-1; converted into matrix
@@ -413,44 +498,6 @@ def get_angle(df, gazeX, gazeY, gazeZ, headX, headY, headZ):
 
     return gaze_angle, head_angle
 
-
-def object_validation(df, left_pupil, right_pupil, hitcomponent):
-    """
-
-    Parameters
-    ----------
-    df : pandas dataframe
-        raw, cleaned dataframe.
-    left_pupil : string
-        preprocessed variable with left pupil diameter information [mm].
-    right_pupil : string
-        preprocessed variable with right pupil diameter information [mm].
-    hitcomponent : string
-        column name with objects looked at.
-
-    Returns
-    -------
-    hitobject : list
-        preprocessed list of objects looked at.
-
-    """
-
-    hitobject = list()
-
-    for i in df.index:
-        if np.logical_or(df[right_pupil].isna()[i] == False, df[left_pupil].isna()[i] == False):
-            hitobject.append(df[hitcomponent][i].split(' ')[-1])
-            if hitobject[i] == "partitionwall" or hitobject[i] == "Lockers_02_A_SM":
-                hitobject[i] = "wall"
-            else:
-                hitobject[i] = hitobject[i].split('.')[-1]
-        else:
-            hitobject.append('NaN')
-
-    return hitobject
-
-
-# TODO gaze_interpolate necessary?
 
 def gaze_interpolate(df, gazeX, gazeY, gazeZ):
     """
