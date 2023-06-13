@@ -18,14 +18,18 @@ Preprocessing is an object class holding all dataframes to processing. Getter fu
 
 **calculate_and_process_variables**
 - blink detection, missing data and combined pupil diameter:
-	- using missing data in gaze directon and gaze origin to mark missing data
-	- Since blinks usually not longer than 500ms, only shorter intervals are considered as blinks. Blinks only neeeded to be dectected to correct for artifacts and outliers around the blink event.
-		- mask 1 additional datapoint, representing at least 10 ms around the blink as missing (Ref: https://doi.org/10.3758/s13428-022-01957-7)
+	- Using missing data in gaze directon and gaze origin to identify missing data
+	- Since blinks are usually not longer than 500ms, only intervals up to 500ms were considered as blinks. 
+	  We only neeeded to detect blinks to correct for artifacts and outliers around a blink event.
+		- Masked 1 additional datapoint, representing at least 10 ms around the blink as missing (Ref: https://doi.org/10.3758/s13428-022-01957-7)
 	- calculate a combined pupil diameter as the arthmetic mean using the pupil diameter variables of both eyes. 
 		- For each row, only a mean is caluclated if both variables contain valid values. 
 		
-- baseline correction pupil diameter:
-- 
+- baseline correction pupil diameter: obtained individual baselines for each stimulus interval by caluclating an arithmetic mean
+  over the 3 second countdown before each stimulus appeared. 
+
+- Used the pupil diameter values of both eyes as an idicator of the Eye Trackers tracking ratio. Sessions with a 
+  trackin ratio below 80% during the experiment part were removed from the sample. 
 
 - For 3D condition: Calculate 2D gaze points at an immaginary surface at the position of the screen in the 2D condition. 
 
