@@ -183,7 +183,7 @@ class Preprocessing:
                 if np.isnan(df['left.pupil_diameter_clean'].iloc[i]):
                     idx_s = i
 
-                    while np.logical_and(np.isnan(df['left.pupil_diameter_clean'].iloc[i]), i < len(df)-1):
+                    while np.logical_and(np.isnan(df['left.pupil_diameter_clean'].iloc[i]), i < len(df) - 1):
                         i += 1
 
                     idx_e = i + 1
@@ -192,9 +192,9 @@ class Preprocessing:
                         if dur < 0.5:
                             df['left.pupil_diameter_clean'].iloc[idx_s - 1:idx_e] = np.nan
                     if idx_e >= len(df):
-                        dur = df['time'].iloc[idx_e-1] - df['time'].iloc[idx_s]
+                        dur = df['time'].iloc[idx_e - 1] - df['time'].iloc[idx_s]
                         if dur < 0.5:
-                            df['left.pupil_diameter_clean'].iloc[idx_s - 1:idx_e-1] = np.nan
+                            df['left.pupil_diameter_clean'].iloc[idx_s - 1:idx_e - 1] = np.nan
                 i += 1
 
             i = 0
@@ -205,7 +205,7 @@ class Preprocessing:
                 if np.isnan(df['right.pupil_diameter_clean'].iloc[i]):
                     idx_s = i
 
-                    while np.logical_and(np.isnan(df['right.pupil_diameter_clean'].iloc[i]), i < len(df)-1):
+                    while np.logical_and(np.isnan(df['right.pupil_diameter_clean'].iloc[i]), i < len(df) - 1):
                         i += 1
 
                     idx_e = i + 1
@@ -214,9 +214,9 @@ class Preprocessing:
                         if dur < 0.5:
                             df['right.pupil_diameter_clean'].iloc[idx_s - 1:idx_e] = np.nan
                     if idx_e >= len(df):
-                        dur = df['time'].iloc[idx_e-1] - df['time'].iloc[idx_s]
+                        dur = df['time'].iloc[idx_e - 1] - df['time'].iloc[idx_s]
                         if dur < 0.5:
-                            df['right.pupil_diameter_clean'].iloc[idx_s - 1:idx_e-1] = np.nan
+                            df['right.pupil_diameter_clean'].iloc[idx_s - 1:idx_e - 1] = np.nan
 
                 i += 1
 
@@ -255,8 +255,8 @@ class Preprocessing:
             df1 = self.dataframes[file]
             name1 = self.data_lst[file]
             print(self.data_lst[file])
-            df2 = self.dataframes[file+1]
-            name2 = self.data_lst[file+1]
+            df2 = self.dataframes[file + 1]
+            name2 = self.data_lst[file + 1]
             print(self.data_lst[file + 1])
             if df1['ID'].iloc[0] == df2['ID'].iloc[0]:
                 print('same id')
@@ -284,28 +284,47 @@ class Preprocessing:
                 df1.to_csv(invalid_path + '{}'.format(name1), index=False)
                 df2.to_csv(invalid_path + '{}'.format(name2), index=False)
 
-
     def calculate_and_process_variables(self):
         for file in range(0, len(self.dataframes)):
             df = self.dataframes[file]
             name = self.data_lst[file]
+            dim = df['dimension'].iloc[0]
             print(name)
 
             # Variable created: time_diff
             df['time_diff'] = calculate_time_diff(df, 'time')
             df['hitobject'] = object_validation(df, 'combined.pupil_diameter_corr', 'rayhitcomponent')
+            df['hitobject'] = df['hitobject'].replace({'regal_offen': 'wall'})
 
-            df['head_x'], df['head_y'], df['head_z'] = get_head_direction(df,'playerrotationRoll','playerrotationPitch','playerrotationYaw')
+            df['head_x'], df['head_y'], df['head_z'] = get_head_direction(df, 'playerrotationRoll',
+                                                                          'playerrotationPitch', 'playerrotationYaw')
 
-            angledir = get_angle(df,'combined.pupil_diameter_corr', 'combined.gaze_direction_normalized.X',
-                                    'combined.gaze_direction_normalized.Y',
-                                    'combined.gaze_direction_normalized.Z',
-                                    'head_x',
-                                    'head_y',
-                                    'head_z')
+            angledir = get_angle(df, 'combined.pupil_diameter_corr', 'combined.gaze_direction_normalized.X',
+                                 'combined.gaze_direction_normalized.Y',
+                                 'combined.gaze_direction_normalized.Z',
+                                 'head_x',
+                                 'head_y',
+                                 'head_z')
 
             df['head_angle'] = angledir[1]
             df['gaze_angle'] = angledir[0]
+
+            df['head_loc_velo'] = head_loc_velo(df)
+
+            # Calculate 2D gaze points on surface
+            if dim == 2:
+                df = df.rename(columns={'2d_x': '2d_x_pixel', '2d_y': '2d_y_pixel'})
+                df['2d_x'] = df['rayimpactpointY'].values
+                df['2d_y'] = df['rayimpactpointZ'].values
+
+                __, __, df['2Dside'] = get_2D_gaze_points(df, 'playerlocationX', 'playerlocationY',
+                                                          'playerlocationZ', 'rayimpactpointX',
+                                                          'rayimpactpointY', 'rayimpactpointZ')
+
+            if dim == 3:
+                df['2d_x'], df['2d_y'], df['2Dside'] = get_2D_gaze_points(df, 'playerlocationX', 'playerlocationY',
+                                                                          'playerlocationZ', 'rayimpactpointX',
+                                                                          'rayimpactpointY', 'rayimpactpointZ')
 
             self.dataframes[file] = df
 
@@ -360,6 +379,7 @@ def calculate_time_diff(df, time):
 
     return time_diff
 
+
 def object_validation(df, combined_pupil, hitcomponent):
     """
 
@@ -393,6 +413,7 @@ def object_validation(df, combined_pupil, hitcomponent):
             else:
                 hitobject[i] = hitobject[i].split('.')[-1]
     return hitobject
+
 
 def get_head_direction(df, roll, pitch, yaw):
     """
@@ -445,7 +466,7 @@ def get_head_direction(df, roll, pitch, yaw):
     return headX, headY, headZ
 
 
-def get_angle(df,combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
+def get_angle(df, combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
     """
 
     Parameters
@@ -475,9 +496,9 @@ def get_angle(df,combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
     """
 
     # for gaze angle
-    #df[gazeX] = df[gazeX].replace(-1, np.nan)
-    #df[gazeY] = df[gazeY].replace(-1, np.nan)
-    #df[gazeZ] = df[gazeZ].replace(-1, np.nan)
+    # df[gazeX] = df[gazeX].replace(-1, np.nan)
+    # df[gazeY] = df[gazeY].replace(-1, np.nan)
+    # df[gazeZ] = df[gazeZ].replace(-1, np.nan)
 
     df[gazeX] = np.where(df[combined_pupil].isna(), np.nan, df[gazeX])
     df[gazeY] = np.where(df[combined_pupil].isna(), np.nan, df[gazeY])
@@ -497,6 +518,57 @@ def get_angle(df,combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
     head_angle = np.concatenate(([0], head_angle))  # add the zero at the start
 
     return gaze_angle, head_angle
+
+
+def head_loc_velo(df, time_diff="time_diff", head_loc_x="playerlocationX",
+                  head_loc_y="playerlocationY", head_loc_z="playerlocationZ"):
+    """
+
+    Parameters
+    ----------
+    df : pandas dataframe
+        should contain the following variables
+    time_diff: str
+        difference in sec between two time points
+    head_loc_x: str
+        X coordinate of the HMD head location
+    head_loc_y: str
+        Y coordinate of the HMD head location
+    head_loc_z: str
+        Z coordinate of the HMD head location
+
+    Returns
+    -------
+    head_loc_dist : list
+        conveys distance calculated between two head location vectors normalized
+        by time difference.
+    """
+    t0 = df[[head_loc_x, head_loc_y, head_loc_z]].iloc[:-1]
+    t1 = df[[head_loc_x, head_loc_y, head_loc_z]].iloc[1:]
+
+    head_loc_velo = np.divide(np.linalg.norm(np.subtract(t1, t0), axis=1), df[time_diff].iloc[1:])
+
+    return np.concatenate(([0], head_loc_velo), axis=None)
+
+
+def get_2D_gaze_points(df, pX, pY, pZ, lX, lY, lZ):
+    dfn = df.copy()
+
+    s = np.array([dfn[pX], dfn[pY], dfn[pZ]]).T  # head
+    e = np.array([dfn[lX], dfn[lY], dfn[lZ]]).T  # gaze
+    d = e - s  # direction vector from head to gaze position
+
+    stimX = 84  # X position where the screen is or the stimuli appear
+
+    lam = ((stimX - s[:, 0]) / d[:, 0])
+
+    dfn['2d_x'] = d[:, 1] * lam + s[:, 1]
+    dfn['2d_y'] = d[:, 2] * lam + s[:, 2]
+
+    dfn.loc[dfn['2d_x'] < 0, '2Dside'] = 'left'
+    dfn.loc[dfn['2d_x'] >= 0, '2Dside'] = 'right'
+
+    return dfn['2d_x'].values, dfn['2d_y'].values, dfn['2Dside'].values
 
 
 def gaze_interpolate(df, gazeX, gazeY, gazeZ):
