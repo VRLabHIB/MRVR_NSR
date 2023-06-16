@@ -124,6 +124,7 @@ if __name__ == '__main__':
     result_path = project_path + '\\results\\'
 
     df = pd.read_csv(data_path + '2023-06-16_eye_features.csv')
+    df = df[~df['stimulus'].isin([21, 24])]
     print(len(df))
 
     df = df.dropna(axis = 'index', how = 'any', ignore_index = True)

@@ -9,8 +9,9 @@ from statsmodels.stats import multitest
 
 class Statistics:
     def __init__(self, data_path):
-        df = pd.read_csv(data_path + '\\6_feature_dataset\\2023-06-15_eye_features.csv')
+        df = pd.read_csv(data_path + '\\6_feature_dataset\\2023-06-16_eye_features.csv')
 
+        df = df[~df['stimulus'].isin([21,24])]
         df = df.drop(columns=['condition', 'stimulus', 'Response'])
         df_n = pd.pivot_table(df.iloc[:,:-3], index = ['ID','dimension'], aggfunc = 'mean')
         df_n = df_n.reset_index()

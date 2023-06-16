@@ -37,7 +37,6 @@ class Features:
         ratio_inner_outer_dur_lst = list()
         ratio_left_right_dur_lst = list()
 
-        avg_sacc_ampl_lst = list()
         avg_sacc_dur_lst = list()
         avg_sacc_velocity_lst = list()
 
@@ -183,8 +182,7 @@ class Features:
                 ##################
                 saccades = [sac for sac in unique_gaze_labels if sac.startswith('sac')]
 
-                # Get sacc amplitude
-                ampl_lst = list()
+                # Get saccades
                 sacc_dur = list()
                 sacc_velo = list()
 
@@ -192,19 +190,13 @@ class Features:
                     idx_s = df_s[df_s['gaze_label_number'] == sac].index
                     df_sac = df_s[df_s['gaze_label_number'] == sac]
 
-                    xy0 = df[['2d_x', '2d_y']].iloc[idx_s[0] - 1]
-                    xy1 = df_sac[['2d_x', '2d_y']].iloc[-1]
-
-                    ampl = np.linalg.norm(xy1 - xy0)
-                    ampl_lst.append(ampl)
 
                     t_sacc = df_sac['label_duration'].iloc[0]
                     sacc_dur.append(t_sacc)
 
                     sacc_velo.append(np.nanmean(df_sac['gaze_angle_velo']))
 
-                # Saccades Amplitude, Duration and velocity
-                avg_sacc_ampl_lst.append(np.nanmean(ampl_lst))
+                # Saccades duration and velocity
                 avg_sacc_dur_lst.append(np.nanmean(sacc_dur))
                 avg_sacc_velocity_lst.append(np.nanmean(sacc_velo))
 
@@ -226,7 +218,6 @@ class Features:
                                        'Equal fixation duration within figure':ratio_inner_outer_dur_lst,
 
                                        'Mean saccade duration': avg_sacc_dur_lst,
-                                       'Mean saccade amplitude': avg_sacc_ampl_lst,
                                        'Mean saccade velocity': avg_sacc_velocity_lst,
 
                                        'Mean pupil diameter': pupil_dia_lst,
