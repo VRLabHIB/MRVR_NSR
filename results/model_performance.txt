@@ -1,0 +1,7 @@
+3240
+3211
+Backend TkAgg is interactive backend. Turning interactive mode on.
+Mean Acc:  0.82 SD:  0.015
+Best Model accuracy  [0.863]
+Quick Precision: 0.825
+Slow Precision: 0.816

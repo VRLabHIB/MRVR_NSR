@@ -1,0 +1,20 @@
+gender
+female    33
+male      21
+
+
+visual_aid
+no                35
+glasses           17
+contact lenses     2
+
+age
+count    54.000000
+mean     24.018519
+std       7.238500
+min      17.000000
+25%      21.000000
+50%      23.000000
+75%      25.000000
+max      68.000000
+

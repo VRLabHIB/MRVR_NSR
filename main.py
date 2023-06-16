@@ -1,9 +1,7 @@
 import os
-
+from datetime import date
 import numpy as np
 import pandas as pd
-
-from datetime import date
 
 import src.P101_experiment_preprocessing_data as P101
 import src.P102_experiment_fixation_detection as P102
@@ -100,8 +98,6 @@ if __name__ == '__main__':
     #prep_quest = P201.Preprocessing(data_path)
     #prep_quest.refactor_and_select_columns()
     #prep_quest.save_dataframe()
-
-
 
     print('')
 

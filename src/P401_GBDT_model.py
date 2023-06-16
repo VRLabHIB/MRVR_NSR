@@ -1,3 +1,4 @@
+import matplotlib
 import numpy as np
 import pandas as pd
 import os
@@ -20,7 +21,7 @@ from sklearn import ensemble
 from sklearn.metrics import f1_score
 from sklearn.metrics import precision_score
 
-def GBDT(source, target, method, n_iter=50, n_estimators=100):
+def GBDT(source, target, n_iter=50, n_estimators=100):
     # method could also be binary
     print('Target variable', target.columns.tolist())
     print('Source variables', source.columns.tolist())
@@ -51,12 +52,9 @@ def GBDT(source, target, method, n_iter=50, n_estimators=100):
         prediction = gbm.predict(X_test)
         accuracy = accuracy_score(Y_test, prediction)
         acc_lst.append(accuracy)
-        if method == 'median':
-            f1 = f1_score(Y_test, prediction, labels=["2D", "3D"])
-            f1_lst.append(f1)
-        if method == 'binary':
-            f1 = f1_score(Y_test, prediction, labels=["2D", "3D"])
-            f1_lst.append(0)
+
+        f1 = f1_score(Y_test, prediction, labels=["2D", "3D"])
+        f1_lst.append(f1)
 
         qprecision = precision_score(Y_test, prediction, pos_label=-1)
         quickprec_lst.append(qprecision)
@@ -83,73 +81,67 @@ def GBDT(source, target, method, n_iter=50, n_estimators=100):
 from sklearn.metrics import confusion_matrix
 
 
-def plotting(target, values, labels, shap_values, shap_value, features, generalized, acc_lst, best_acc, name,
-             columns, project_path):
-    plt.rcParams.update({'font.size': 12})
-    plt.figure(tight_layout=True, figsize=(20, 15))
+def model_writer(results_path, model):
+    os.chdir(results_path)
 
-    plt.subplot(2, 2, 2)
-    plt.text(0.5, 0.5,
-             'Model Performance\n \n Features: {} \n Generalized: {}\n \n Accuracy: Mean {}, SD {}\n Best Model accuracy {}'.format(
-                  features, generalized, np.round(np.nanmean(acc_lst), 3), np.round(np.nanstd(acc_lst), 3),
-                 np.round((best_acc * 100), 3)),
-             ha='center', va='center', size=16)
-    plt.axis('off')
-    plt.subplot(2, 2, 1)
-    mat = confusion_matrix(target, values)
-    sns.heatmap(data=mat.T, square=True, annot=True, fmt='d', cbar=False,
-                xticklabels=labels,
-                yticklabels=labels)
-    plt.xlabel('true label')
-    plt.ylabel('predicted label')
-    plt.title('Confusion Matrix for the Best Model')
+    with open(results_path + '/model.npy', 'wb') as f:
+        np.save(f, np.asarray(model[0]))  # X_test
+        np.save(f, np.asarray(model[1]))  # Y_test
+        np.save(f, np.asarray(model[2]))  # prediction
+        np.save(f, np.asarray([model[3]]))  # best_acc
+        np.save(f, np.asarray(model[4]))  # acc_lst
+        np.save(f, np.asarray(model[5]))  # shap_values
+        np.save(f, np.asarray(model[6]))  # quickprec_lst
+        np.save(f, np.asarray(model[7]))  # slowprec_lst
+        np.save(f, np.asarray(model[8]))  # f1s
+        np.save(f, np.asarray(model[9]))  # contingency
+        np.save(f, np.asarray(model[10]))  # shap_value
 
-    plt.subplot(2, 2, 3)
-    shap.initjs()
-    shap.summary_plot(shap_values, X_test, feature_names=columns, plot_type="bar", plot_size=None, show=False)
-    w, _ = plt.gcf().get_size_inches()
-    plt.gcf().set_size_inches(w, w * 2.5 / 4)
-    plt.tight_layout()
-    plt.subplot(2, 2, 4)
-    shap.summary_plot(shap_value, X_test, feature_names=columns, plot_type='dot', plot_size=None, show=False)
-    w, _ = plt.gcf().get_size_inches()
-    plt.gcf().set_size_inches(w, w * 2.5 / 4)
-    plt.tight_layout()
-    path = project_path+ '\\results\\'
 
-    plt.savefig(path + '{}.jpg'.format(name), bbox_inches='tight', dpi=500)
-    plt.show()
+def model_reader(results_path):
+    os.chdir(results_path)
+    with open(results_path + '/model.npy', 'rb') as f:
+        X_test = np.load(f)
+        Y_test = np.load(f)
+        prediction = np.load(f)
+        best_acc = np.load(f)
+        acc_lst = np.load(f)
+        shap_values = np.load(f)
+        quickprec_lst = np.load(f)
+        slowprec_lst = np.load(f)
+        f1s = np.load(f)
+        contingency = np.load(f)
+        shap_value = np.load(f)
+
+    return [X_test, Y_test, prediction, best_acc, acc_lst, shap_values, quickprec_lst, slowprec_lst, f1s, contingency,
+            shap_value]
+
 
 if __name__ == '__main__':
     val_path = os.path.abspath(os.getcwd())
     project_path = os.path.abspath(Path(val_path).parent)
     data_path = project_path + '\\data\\6_feature_dataset\\'
+    result_path = project_path + '\\results\\'
 
     df = pd.read_csv(data_path + '2023-06-16_eye_features.csv')
     print(len(df))
 
     df = df.dropna(axis = 'index', how = 'any', ignore_index = True)
-    #df = df.drop(columns=['Equal fixation duration within figure', 'Mean regressive fixation duration'])
     print(len(df))
 
     import random
-
     random.seed(10092022)
 
     df = df.reset_index(drop=True)
+    #source = df.iloc[:, 7:-3]
+    #target = df[['dimension']].astype(int)
 
+    #model = GBDT(source, target, n_iter=100, n_estimators=100)
+    #model_writer(result_path, model)
 
-    source = df.iloc[:, 7:-3]
-
-    target = df[['dimension']].astype(int)
-
-    model = GBDT(source, target, n_iter=100, n_estimators=100, method='median')
-
-    # model_writer('self3D', model)
+    model = model_reader(result_path)
 
     columns = df.columns[7:-3]
-
-    # model = model_reader('2D3D')
     X_test = model[0]
     Y_test = model[1]
     prediction = model[2]
@@ -167,10 +159,36 @@ if __name__ == '__main__':
     print('Quick Precision: {}'.format(np.round(np.nanmean(quickprec_lst), 3)))
     print('Slow Precision: {}'.format(np.round(np.nanmean(slowprec_lst), 3)))
 
-    features = '2D3D'
-    split = 'binary'
-    plotting(Y_test, prediction, ["2D", "3D"], shap_values, shap_value, features, split, acc_lst, best_acc,
-             features,  columns, project_path)
+
+    # Plot results
+    #plt.rcParams.update({'font.size': 30})
+    font = {'size': 30}
+    matplotlib.rc('font', **font)
+
+    fig = plt.figure(figsize=(20, 15))
+    mat = confusion_matrix(Y_test, prediction)
+    sns.heatmap(data=mat.T, square=True, annot=True, fmt='d', cbar=False,
+                xticklabels=["2D", "3D"],
+                yticklabels=["2D", "3D"])
+    plt.xlabel('true label',fontsize=30)
+    plt.ylabel('predicted label',fontsize=30)
+    plt.plot()
+    plt.savefig(result_path + 'confusion_matrix.jpg', dpi=500)  # bbox_inches='tight
+    #plt.show()
+
+    fig = plt.figure(figsize=(20, 15))
+    shap.initjs()
+    shap.summary_plot(shap_value, X_test, feature_names=columns, plot_type='dot', plot_size=None, show=False)
+    w, _ = plt.gcf().get_size_inches()
+    plt.gcf().set_size_inches(w, w * 2.5 / 4)
+
+    #ax_list = shap_figure.axes  # see https://stackoverflow.com/a/24107230/11148296
+    #ax = ax_list[0]
+    #ax.set_xlabel('local shap values (left side= 2D; right side = 3D)', fontsize=20)
+
+    plt.tight_layout()
+    plt.plot()
+    plt.savefig(result_path + 'shap_summary.jpg', dpi=500)  # bbox_inches='tight
 
 
 
