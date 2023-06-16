@@ -1,0 +1,8 @@
+pandas~=2.0.2
+numpy~=1.23.1
+scipy~=1.10.1
+seaborn~=0.12.2
+matplotlib~=3.7.1
+datamatrix~=1.0.2
+statsmodels~=0.14.0
+shapely~=2.0.1

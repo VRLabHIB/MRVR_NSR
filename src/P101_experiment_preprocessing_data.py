@@ -2,9 +2,6 @@ import os
 from datetime import datetime
 import pandas as pd
 
-# import warnings
-# warnings.filterwarnings('ignore')
-
 import numpy as np
 import glob
 
@@ -299,15 +296,15 @@ class Preprocessing:
             df['head_x'], df['head_y'], df['head_z'] = get_head_direction(df, 'playerrotationRoll',
                                                                           'playerrotationPitch', 'playerrotationYaw')
 
-            angledir = get_angle(df, 'combined.pupil_diameter_corr', 'combined.gaze_direction_normalized.X',
+            angledir = get_angle_velo(df, 'combined.pupil_diameter_corr', 'combined.gaze_direction_normalized.X',
                                  'combined.gaze_direction_normalized.Y',
                                  'combined.gaze_direction_normalized.Z',
                                  'head_x',
                                  'head_y',
                                  'head_z')
 
-            df['head_angle'] = angledir[1]
-            df['gaze_angle'] = angledir[0]
+            df['gaze_angle_velo'] = angledir[0]
+            df['head_angle_velo'] = angledir[1]
 
             df['head_loc_velo'] = head_loc_velo(df)
 
@@ -466,7 +463,7 @@ def get_head_direction(df, roll, pitch, yaw):
     return headX, headY, headZ
 
 
-def get_angle(df, combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
+def get_angle_velo(df, combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
     """
 
     Parameters
@@ -494,30 +491,27 @@ def get_angle(df, combined_pupil, gazeX, gazeY, gazeZ, headX, headY, headZ):
         head angle between two following experimental steps [degree].
 
     """
+    dfs = df.copy()
 
-    # for gaze angle
-    # df[gazeX] = df[gazeX].replace(-1, np.nan)
-    # df[gazeY] = df[gazeY].replace(-1, np.nan)
-    # df[gazeZ] = df[gazeZ].replace(-1, np.nan)
+    time = dfs['time_diff'].iloc[1:]
+    dfs[gazeX] = np.where(dfs[combined_pupil].isna(), np.nan, dfs[gazeX])
+    dfs[gazeY] = np.where(dfs[combined_pupil].isna(), np.nan, dfs[gazeY])
+    dfs[gazeZ] = np.where(dfs[combined_pupil].isna(), np.nan, dfs[gazeZ])
 
-    df[gazeX] = np.where(df[combined_pupil].isna(), np.nan, df[gazeX])
-    df[gazeY] = np.where(df[combined_pupil].isna(), np.nan, df[gazeY])
-    df[gazeZ] = np.where(df[combined_pupil].isna(), np.nan, df[gazeZ])
+    m_t1 = np.array(dfs[[gazeX, gazeY, gazeZ]].iloc[1:])  # array starts at t1 until tn; converted into matrix
+    m_t0 = np.array(dfs[[gazeX, gazeY, gazeZ]].iloc[:-1])  # array starts at t0 until tn-1; converted into matrix
 
-    m_t1 = np.array(df[[gazeX, gazeY, gazeZ]].iloc[1:])  # array starts at t1 until tn; converted into matrix
-    m_t0 = np.array(df[[gazeX, gazeY, gazeZ]].iloc[:-1])  # array starts at t0 until tn-1; converted into matrix
-
-    gaze_angle = np.degrees(np.arccos((m_t1 * m_t0).sum(-1)))
-    gaze_angle = np.concatenate(([0], gaze_angle))  # add the zero at the start
+    gaze_angle_velo = np.degrees(np.arccos((m_t1 * m_t0).sum(-1)))/time
+    gaze_angle_velo = np.concatenate(([0], gaze_angle_velo))  # add the zero at the start
 
     # for head angle
-    m_t1 = np.array(df[[headX, headY, headZ]].iloc[1:])  # array starts at t1 until tn; converted into matrix
-    m_t0 = np.array(df[[headX, headY, headZ]].iloc[:-1])  # array starts at t0 until tn-1; converted into matrix
+    m_t1 = np.array(dfs[[headX, headY, headZ]].iloc[1:])  # array starts at t1 until tn; converted into matrix
+    m_t0 = np.array(dfs[[headX, headY, headZ]].iloc[:-1])  # array starts at t0 until tn-1; converted into matrix
 
-    head_angle = np.degrees(np.arccos((m_t1 * m_t0).sum(-1)))
-    head_angle = np.concatenate(([0], head_angle))  # add the zero at the start
+    head_angle_velo = np.degrees(np.arccos((m_t1 * m_t0).sum(-1)))/time
+    head_angle_velo = np.concatenate(([0], head_angle_velo))  # add the zero at the start
 
-    return gaze_angle, head_angle
+    return gaze_angle_velo, head_angle_velo
 
 
 def head_loc_velo(df, time_diff="time_diff", head_loc_x="playerlocationX",
@@ -543,11 +537,12 @@ def head_loc_velo(df, time_diff="time_diff", head_loc_x="playerlocationX",
         conveys distance calculated between two head location vectors normalized
         by time difference.
     """
-    t0 = df[[head_loc_x, head_loc_y, head_loc_z]].iloc[:-1]
-    t1 = df[[head_loc_x, head_loc_y, head_loc_z]].iloc[1:]
+    t0 = df[[head_loc_x, head_loc_y, head_loc_z]].iloc[:-1].to_numpy()
+    t1 = df[[head_loc_x, head_loc_y, head_loc_z]].iloc[1:].to_numpy()
 
-    head_loc_velo = np.divide(np.linalg.norm(np.subtract(t1, t0), axis=1), df[time_diff].iloc[1:])
-
+    time = df[time_diff].iloc[1:]
+    sub = np.subtract(t1, t0)
+    head_loc_velo = np.linalg.norm(sub, axis=1) / time
     return np.concatenate(([0], head_loc_velo), axis=None)
 
 
@@ -569,60 +564,3 @@ def get_2D_gaze_points(df, pX, pY, pZ, lX, lY, lZ):
     dfn.loc[dfn['2d_x'] >= 0, '2Dside'] = 'right'
 
     return dfn['2d_x'].values, dfn['2d_y'].values, dfn['2Dside'].values
-
-
-def gaze_interpolate(df, gazeX, gazeY, gazeZ):
-    """
-
-    Parameters
-    ----------
-    df : pandas dataframe
-        DATAFRAME WITH GAZE COLUMNS.
-    gazeX : string
-        NAME OF COLUMN WITH GAZE X VECTOR.
-    gazeY : string
-        NAME OF COLUMN WITH GAZE Y VECTOR.
-    gazeZ : string
-        NAME OF COLUMN WITH GAZE Z VECTOR.
-
-    Returns
-    -------
-    pandas series
-        GAZE X INTERPOLATED AND NORMALIZED.
-    pandas series
-        GAZE Y INTERPOLATED AND NORMALIZED.
-    pandas series
-        GAZE Z INTERPOLATED AND NORMALIZED.
-
-    """
-
-    df["gazeX"] = df[gazeX].copy()
-    df["gazeY"] = df[gazeY].copy()
-    df["gazeZ"] = df[gazeZ].copy()
-
-    df = df[['gazeX', 'gazeY', 'gazeZ']]
-
-    ## according to the documentation of eyetracker
-    df[df["gazeX"] == -1.0] = np.nan
-    df[df["gazeY"] == -1.0] = np.nan
-    df[df["gazeZ"] == -1.0] = np.nan
-
-    ## perform interpolation
-
-    df['gazeX'] = df["gazeX"].interpolate(method='polynomial', order=1, limit_area='inside', limit=5)
-    df['gazeY'] = df["gazeY"].interpolate(method='polynomial', order=1, limit_area='inside', limit=5)
-    df['gazeZ'] = df["gazeZ"].interpolate(method='polynomial', order=1, limit_area='inside', limit=5)
-
-    # TODO check here
-    ## separate dataframe into no-nan and nan values
-    # df_v = df[~df.isna().any(axis=1)]
-    # df_m = df[df.isna().any(axis=1)]
-
-    ## normalization and overwriting the column with normalized values
-    # preprocessing.normalize(df_v[["gazeX", 'gazeY', 'gazeX']], norm='l2', copy=False)
-
-    ##concat missings and non missings dataframes
-    # df = pd.concat([df_v, df_m])
-    # df = df.sort_index()
-
-    return df['gazeX'].values, df['gazeY'].values, df['gazeZ'].values

@@ -1,3 +1,4 @@
+import numpy as np
 
 def create_dict_from_lists(keys, values):
     # to convert lists to dictionary
@@ -13,6 +14,19 @@ def create_dict_from_lists(keys, values):
 def split(word):
     return [char for char in word]
 
+def calculate_centroid(x2D, y2D):
+    x = np.array(x2D)
+    y = np.array(y2D)
+    mx = np.nanmean(x)
+    my = np.nanmean(y)
+
+    dist = np.sqrt((x - mx)**2 + (y - my)**2)
+    max_dist = np.max(dist)
+
+    return mx, my, max_dist
+
+def most_frequent(List):
+    return max(set(List), key = List.count)
 
 if __name__ == '__main__':
     #Unit Test

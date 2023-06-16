@@ -34,16 +34,38 @@ Preprocessing is an object class holding all dataframes to processing. Getter fu
 - As a result 54 participants remained for the analysis, 12 had to be removed because either one or both conditions did not met the required threshold.  
 
 **calculate_and_process_variables**
-- 
+- the followwing variables were calculated:
+	- "time_diff": time difference between consecutive points
+	- "hitobject": cleaned gaze target object
+	- "head_X" (Y,Z): head direction vector
+	- "gaze_angle_velo": change in gaze angle between consecutive points per second (degree)
+	- "head_angle_velo": change in head angle between consecutive points per second (degree)
+	- "head_loc_velo": change in head location between consecutive points per second (ue coordinate system)
 
 - For 3D condition: Calculate 2D gaze points at an immaginary surface at the position of the screen in the 2D condition. 
 
 ### P102_experiment_fixation_and_gaze_target_detection.py
 
 **ivt_fixation_detection**
-- fixation detection:
+- fixation and saccade detection:
+	- fixation: head_velo < 7°/s and gaze_velo < 30°/s AND 100ms < fixation duration < 800 ms
+	- saccade: gaze_velo > 60°/s AND 30ms < saccade duration < 80ms
 	- mask blinks
-	- IVT fixation detection 60°/s on 2D gaze points
+	based on https://doi.org/10.1145/3343031.3350947
+
+Thresholds for the IVT algorithm to detect fixation where set conservative. In particular, with this algorithm we ignored fixations during head movements. 
+However, moving their head could help participants to explore the figure from a different angle in the 3D condition. 
+Yet it is possible for people to fixate on one spot while rotating their head around the figure.  
+To address this problem of free head movement accordingly, we used an IDT fixation detection algorihtm to detect additional missed dfixation during periods of head movement. 
+Since the dispersion threshold focuses on the distance of the gaze points from each other, head movements are ignored. 
+
+**idt_fixation_detection**
+based on https://doi.org/10.1145/355017.355028
+100ms < fixation duration < 800 ms
+dispersion threshold < 2° angle distance from one point to another calculated with the average distance of the participant to the screen (scrren location x=84)
+
+The final number of fixations was then formed as a union of both algorithms.
+
 
 To calculate features that required information gaze position on the figure, we had to apply further steps in the procedure: 
 - Due to low accuracy and precision of the HMD eye tracker fixation midpoints missed the figure. Our approach ensures that fixation points with a small distance to the figure could be assigned to a corresponding part of the figure. 
@@ -52,13 +74,18 @@ To calculate features that required information gaze position on the figure, we 
 
 - Procedure:
 	- calculate fixation midpoints
+		- A fixation midpoint was calculated as the centroid point of all 2D points during the fixation
 	- calculate figure midpoints and determine figure radius
-	- extend figure radius and stop extension before both circle start intersecting
-	- assign each gaze point to a respective figure
-	- We calculated the distance between the fixation midpoints and the closest cube midpoint of the figure.
-		- fixation midpoints are calculated as 2D points using #TODO
-		- figure midpoints are calculated as #TODO
-		- based on the closest cube, the fixation is assigned to the respective figure segment that contains this closest cube. 
+		- detect cube midpoints for 2D based on the manual annotations done by a stundet assistant with the [Computer Vision Annotation Tool](https://cvat.org/)
+			- to check if all manual annotations were correct we reconstructed figure plots from the annotation data in porject_path + '\\validity_checks\\annotation_plots\\'
+		- Calculate figure midpoint as a centroid point of the cube mid points
+	- determine figure radius as the midpoint between both figure midpoints
+	- for each fixation midpoint:
+		- get distance to all figure cubes
+		- select the 3 closest cubes
+		- select segment part based on majority vote (wether the majority of the 3 cubes belong to the inner or to the outer part)
+		- if the distance between the fixation midpoint and the figure midpoint is larger than the radius, no segment is detected
+	
 
 ### P201_questionnaire_preprocessing_data.py
 
