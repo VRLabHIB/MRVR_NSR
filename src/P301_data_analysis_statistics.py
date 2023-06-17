@@ -9,7 +9,7 @@ from statsmodels.stats import multitest
 
 class Statistics:
     def __init__(self, data_path):
-        df = pd.read_csv(data_path + '\\6_feature_dataset\\2023-06-16_eye_features.csv')
+        df = pd.read_csv(data_path + '\\6_feature_dataset\\2023-06-17_eye_features.csv')
 
         df = df[~df['stimulus'].isin([21,24])]
         df = df.drop(columns=['condition', 'stimulus', 'Response'])

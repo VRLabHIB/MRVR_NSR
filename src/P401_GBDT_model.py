@@ -123,7 +123,7 @@ if __name__ == '__main__':
     data_path = project_path + '\\data\\6_feature_dataset\\'
     result_path = project_path + '\\results\\'
 
-    df = pd.read_csv(data_path + '2023-06-16_eye_features.csv')
+    df = pd.read_csv(data_path + '2023-06-17_eye_features.csv')
     df = df[~df['stimulus'].isin([21, 24])]
     print(len(df))
 

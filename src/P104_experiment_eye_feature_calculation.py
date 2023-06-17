@@ -11,11 +11,12 @@ import glob
 import src.helper as h
 
 class Features:
-    def __init__(self, data_path, location):
+    def __init__(self, data_path, project_path, location):
         self.df_feature = None
         self.df_f = None
         os.chdir(data_path + location)
         self.data_path = data_path
+        self.project_path = project_path
         self.data_lst = glob.glob("ID*.csv")
         print("Number of files: ", len(self.data_lst))
         self.dataframes = [pd.read_csv(f, sep=',', header=0, index_col=False, low_memory=False) for f in self.data_lst]
@@ -43,6 +44,8 @@ class Features:
         head_rot_speed_lst = list()
         head_loc_speed_lst = list()
 
+        strat_ratio_lst = list()
+
         for file in range(len(self.data_lst)):
             stimuli = np.arange(1,31)
             name = self.data_lst[file]
@@ -55,6 +58,8 @@ class Features:
 
             for stim in stimuli:
                 df_s = df[df['stimulus_ue']==str(stim)]
+                df_s['segment_part'] = df_s['segment_part'].replace(np.nan, 'None')
+                df_s['segment_arm'] = df_s['segment_arm'].replace(np.nan, 'None')
 
                 ID_lst.append(ID)
                 dim_lst.append(dim)
@@ -125,10 +130,10 @@ class Features:
                         if side == 'right':
                             outer_dur_right += fix_dur
 
-                # calculate avg fixation durations
+                ## calculate avg fixation durations
                 mean_fix_dur_lst.append(np.nanmean(fix_dur_lst))
 
-                # Calculate fixation time ratio between inner and outer figure segments
+                ## Calculate fixation time ratio between inner and outer figure segments
                 ratio_left = np.nan
                 ratio_right = np.nan
                 if np.logical_or(inner_dur_left > 0, outer_dur_left > 0):
@@ -143,13 +148,13 @@ class Features:
                 if np.logical_or(ratio_left>=0, ratio_right>=0):
                     ratio_inner_outer_dur_lst.append(np.nanmean([ratio_left,ratio_right]))
 
-                # Calculate fixation time ratio between left and right figure
+                ## Calculate fixation time ratio between left and right figure
                 if np.logical_or(left_dur > 0, right_dur > 0):
                     ratio_left_right_dur_lst.append(1 - (np.abs(left_dur / (left_dur + right_dur) - 0.5) * 2 ))
                 if np.logical_and(left_dur == 0, right_dur == 0):
                     ratio_left_right_dur_lst.append(np.nan)
 
-                # Regressive Fixation Duration
+                ## Regressive Fixation Duration
                 fixations = [fix for fix in unique_gaze_labels if fix.startswith('fix')]
 
                 if len(fixations) >= 3:
@@ -165,9 +170,10 @@ class Features:
                         segment_partt0 = df_fixt0['segment_arm'].iloc[0]
                         segment_partt2 = df_fixt2['segment_arm'].iloc[0]
 
-                        if np.logical_and(sidet0 == sidet2, segment_partt0 == segment_partt2):
-                            fix_dur = df_fixt2['label_duration'].iloc[0]
-                            reg_fix_dur.append(fix_dur)
+                        if segment_partt0 != 'None':
+                            if np.logical_and(sidet0 == sidet2, segment_partt0 == segment_partt2):
+                                fix_dur = df_fixt2['label_duration'].iloc[0]
+                                reg_fix_dur.append(fix_dur)
 
                     if len(reg_fix_dur) > 0:
                         regressive_fix_dur_lst.append(np.nanmean(reg_fix_dur))
@@ -176,6 +182,41 @@ class Features:
 
                 if len(fixations)<3:
                     regressive_fix_dur_lst.append(0)
+
+                ## Strategy ratio
+                fixations_l = fixations.copy()
+                within_fix  = 0
+                between_sacc = 1
+
+                if len(fixations_l)>0:
+                    current_fix = df_s[df_s['gaze_label_number'] == fixations_l[0]]
+                    current_side = h.most_frequent(list(current_fix['2Dside'].values))
+                    current_part = current_fix['segment_part'].iloc[0]
+
+                    while np.logical_and(current_part == 'None', len(fixations_l)>1):
+                        fixations_l.pop(0)
+                        current_fix = df_s[df_s['gaze_label_number'] == fixations_l[0]]
+                        current_part = current_fix['segment_part'].iloc[0]
+
+                    if len(fixations_l)>1:
+                        for fix in fixations_l[1:]:
+                            df_fix = df_s[df_s['gaze_label_number'] == fix]
+                            this_part = df_fix['segment_part'].iloc[0]
+                            this_side = h.most_frequent(list(df_fix['2Dside'].values))
+
+                            if np.logical_and(this_part != 'None', current_part != 'None'):
+                                if current_side == this_side:
+                                    within_fix +=1
+                                if current_side != this_side:
+                                    between_sacc +=1
+
+                            current_side = h.most_frequent(list(df_fix['2Dside'].values))
+                            current_part = df_fix['segment_part'].iloc[0]
+
+                        strat_ratio_lst.append(within_fix/between_sacc)
+
+                if len(fixations_l)<=1:
+                    strat_ratio_lst.append(np.nan)
 
                 ##################
                 #### Saccades ####
@@ -226,11 +267,13 @@ class Features:
                                        'Mean head rotation': head_rot_speed_lst,
                                        'Mean head movement': head_loc_speed_lst,
 
+                                       'Strategy ratio': strat_ratio_lst,
+
                                        })
 
         # Add stimulus information and correct response variable
         #
-        os.chdir(self.data_path + '\\meta\\')
+        os.chdir(self.project_path + '\\meta\\')
         df_info = pd.read_csv('All_stimulus_information.csv')
         df_info_s = df_info[['stimulus', 'Equal?', 'AngularDisp', 'DiffType']]
 
