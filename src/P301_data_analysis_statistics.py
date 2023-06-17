@@ -11,13 +11,33 @@ class Statistics:
     def __init__(self, data_path):
         df = pd.read_csv(data_path + '\\6_feature_dataset\\2023-06-17_eye_features.csv')
 
+        df_cond = df[np.logical_and(df['dimension']==2, df['stimulus']==15)]
+        print('2D condition first')
+        print(df_cond['condition'].value_counts())
+
+        df_stim = df[~df['stimulus'].isin([21, 24])]
+        df_stim = df_stim[np.logical_and(df_stim['dimension'] == 2, df_stim['ID'] == 100)]
+        df_stim = df_stim.iloc[:,3:]
+
+        df_stim = pd.pivot_table(df_stim, index=[ 'stimulus'],aggfunc='first')
+        print(df_stim['AngularDisp'].value_counts())
+        print(df_stim['DiffType'].value_counts())
+
+
+
         df = df[~df['stimulus'].isin([21,24])]
         df = df.drop(columns=['condition', 'stimulus', 'Response'])
         df_n = pd.pivot_table(df.iloc[:,:-3], index = ['ID','dimension'], aggfunc = 'mean')
         df_n = df_n.reset_index()
 
+        df_p = pd.read_csv(data_path + '\\1_questionnaire_preprocessed\\2023-06-12_preprocessed_questionnaire.csv')
+        df_p = df_p[['ID', 'gender']]
+
+        df_n = df_n.merge(df_p, how='left', on='ID')
+
         df2  = df_n[df_n['dimension'] == 2]
         df3 = df_n[df_n['dimension'] == 3]
+
 
         dfw = df2.merge(df3, how = 'inner', on='ID')
         dfw =dfw.drop(columns=['dimension_x', 'dimension_y'])
@@ -56,6 +76,48 @@ class Statistics:
         new = ['Correct (ratio)', 'Reaction time (sec)', 'Mean fixation duration (ms)', ]
         print(table)
 
+        dfx = df.drop(columns=['dimension'])
+        df_a = pd.pivot_table(dfx.iloc[:, :-3], index=['ID'], aggfunc='mean')
+        df_a = df_a.merge(df_p, how='left', on='ID')
+
+        df_male = df_a[df_a['gender']=='male']
+        df_female = df_a[df_a['gender']=='female']
+
+        print('RT total gender')
+        print(df_a.groupby('gender')['RT'].describe())
+        print(scipy.stats.ttest_ind(df_male['RT'].values, df_female['RT'].values))
+
+        print('Correct total gender')
+        print(df_a.groupby('gender')['Correct'].describe())
+        print(scipy.stats.ttest_ind(df_male['Correct'].values, df_female['Correct'].values))
+
+
+        print('RT 2D')
+        print(df2.groupby('gender')['RT'].describe())
+        df_male2 = df2[df2['gender'] == 'male']
+        df_female2 = df2[df2['gender'] == 'female']
+        print('Correct 2D')
+        print(df2.groupby('gender')['Correct'].describe())
+        print('ttest RT 2D')
+        print(scipy.stats.ttest_ind(df_male2['RT'].values, df_female2['RT'].values))
+        print('ttest Correct 2D')
+        print(scipy.stats.ttest_ind(df_male2['Correct'].values, df_female2['Correct'].values))
+
+        print('RT 3D')
+        print(df3.groupby('gender')['RT'].describe())
+        df_male3 = df3[df3['gender'] == 'male']
+        df_female3 = df3[df3['gender'] == 'female']
+        print('Correct 3D')
+        print(df3.groupby('gender')['Correct'].describe())
+        print('ttest RT 3D')
+        print(scipy.stats.ttest_ind(df_male3['RT'].values, df_female3['RT'].values))
+        print('ttest Correct 3D')
+        print(scipy.stats.ttest_ind(df_male3['Correct'].values, df_female3['Correct'].values))
+
+
+
+
+        #######
         print(scipy.stats.ttest_rel(dfw['RT_x'].values, dfw['3DRT'].values))
         print(scipy.stats.wilcoxon(dfw['2DRT'].values, dfw['3DRT'].values))
 

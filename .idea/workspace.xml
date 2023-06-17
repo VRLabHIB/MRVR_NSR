@@ -41,7 +41,7 @@
       <recent name="C:\Users\Stark\Documents\Promotion\_Mental_Rotation\03_MR_in_VR\MRVR_NSR" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.P401_GBDT_model">
+  <component name="RunManager" selected="Python.main">
     <configuration name="P401_GBDT_model" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="MRVR_NSR" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -184,7 +184,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
-          <line>58</line>
+          <line>120</line>
           <option name="timeStamp" value="147" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -203,9 +203,14 @@
           <option name="timeStamp" value="158" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/P401_GBDT_model.py</url>
-          <line>139</line>
-          <option name="timeStamp" value="178" />
+          <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
+          <line>79</line>
+          <option name="timeStamp" value="181" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
+          <line>27</line>
+          <option name="timeStamp" value="182" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -219,6 +224,7 @@
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="mrvr_ger" />
+        <watch expression="dfx" />
       </configuration>
     </watches-manager>
   </component>

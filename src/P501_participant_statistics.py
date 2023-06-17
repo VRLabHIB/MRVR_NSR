@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     feature_path = project_path + '\\data\\6_feature_dataset\\'
 
-    df_f = pd.read_csv(feature_path + '2023-06-16_eye_features.csv')
+    df_f = pd.read_csv(feature_path + '2023-06-17_eye_features.csv')
 
     IDs = df_f['ID'].unique()
 
