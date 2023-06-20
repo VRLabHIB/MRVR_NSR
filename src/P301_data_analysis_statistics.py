@@ -6,6 +6,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.stats import multitest
 
+from scipy.stats import shapiro, normaltest
+from scipy.stats import wilcoxon
 
 class Statistics:
     def __init__(self, data_path):
@@ -50,9 +52,23 @@ class Statistics:
             s_2d = np.round(np.std(dfw['{}_x'.format(col)].values), 3)
             s_3d = np.round(np.std(dfw['{}_y'.format(col)].values), 3)
 
+            print(col)
+            Diff = dfw['{}_x'.format(col)].values - dfw['{}_y'.format(col)].values
+            stat, p = normaltest(Diff)
+            if p>0.05:
+                print('Gaussian')
+            if p<=0.05:
+                print('Not Gaussian')
+                print(p)
+
+            stat, p = wilcoxon(dfw['{}_x'.format(col)].values, dfw['{}_y'.format(col)].values)
+            print('Statistics=%.3f, p=%.3f' % (stat, p))
+
             ttest = scipy.stats.ttest_rel(dfw['{}_x'.format(col)].values, dfw['{}_y'.format(col)].values)
-            t  = np.round(ttest[0], 3)
-            p = ttest[1]
+            #print(ttest)
+            #t  = np.round(ttest[0], 3)
+            #p = ttest[1]
+            t = stat
 
             df_stats.loc[len(df_stats)] = [col, m_2d, s_2d, m_3d, s_3d, t, p]
 
