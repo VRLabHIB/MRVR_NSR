@@ -162,34 +162,39 @@ if __name__ == '__main__':
 
 
     # Plot results
-    #plt.rcParams.update({'font.size': 30})
+    plt.rcParams.update({'font.size': 30})
     font = {'size': 30}
     matplotlib.rc('font', **font)
 
-    fig = plt.figure(figsize=(20, 15))
-    mat = confusion_matrix(Y_test, prediction)
-    sns.heatmap(data=mat.T, square=True, annot=True, fmt='d', cbar=False,
-                xticklabels=["2D", "3D"],
-                yticklabels=["2D", "3D"])
-    plt.xlabel('true label',fontsize=30)
-    plt.ylabel('predicted label',fontsize=30)
-    plt.plot()
-    plt.savefig(result_path + 'confusion_matrix.jpg', dpi=500)  # bbox_inches='tight
+    #fig = plt.figure(figsize=(20, 15))
+    #mat = confusion_matrix(Y_test, prediction)
+    #sns.heatmap(data=mat.T, square=True, annot=True, fmt='d', cbar=False,
+    #            xticklabels=["2D", "3D"],
+    #            yticklabels=["2D", "3D"])
+    #plt.xlabel('true label',fontsize=30)
+    #plt.ylabel('predicted label',fontsize=30)
+    #plt.plot()
+    #plt.savefig(result_path + 'confusion_matrix.jpg', dpi=500)  # bbox_inches='tight
     #plt.show()
 
-    fig = plt.figure(figsize=(20, 15))
+    fig = plt.figure(figsize=(12, 8))
     shap.initjs()
     shap.summary_plot(shap_value, X_test, feature_names=columns, plot_type='dot', plot_size=None, show=False)
-    w, _ = plt.gcf().get_size_inches()
-    plt.gcf().set_size_inches(w, w * 2.5 / 4)
+    #w, _ = plt.gcf().get_size_inches()
+    #plt.gcf().set_size_inches(w, w * 2.5 / 4)
+    #cbar = plt.colorbar()
+    #cbar.ax.tick_params(labelsize=15)
+    #cbar.ax.tick_params(direction='out', length=6, width=2, grid_alpha=0.5)
 
     #ax_list = shap_figure.axes  # see https://stackoverflow.com/a/24107230/11148296
     #ax = ax_list[0]
     #ax.set_xlabel('local shap values (left side= 2D; right side = 3D)', fontsize=20)
 
-    plt.tight_layout()
-    plt.plot()
-    plt.savefig(result_path + 'shap_summary.jpg', dpi=500)  # bbox_inches='tight
+    #plt.tight_layout()
+    plt.show()
+    plt.savefig(result_path + 'shap_summary.jpg', dpi=100)  # bbox_inches='tight
+
+
 
 
 
