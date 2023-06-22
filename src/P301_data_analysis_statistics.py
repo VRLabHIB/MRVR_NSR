@@ -13,24 +13,24 @@ class Statistics:
     def __init__(self, data_path):
         df = pd.read_csv(data_path + '\\6_feature_dataset\\2023-06-17_eye_features.csv')
 
-        df_cond = df[np.logical_and(df['dimension']==2, df['stimulus']==15)]
-        print('2D condition first')
-        print(df_cond['condition'].value_counts())
+        #df_cond = df[np.logical_and(df['dimension']==2, df['stimulus']==15)]
+        #print('2D condition first')
+        #print(df_cond['condition'].value_counts())
 
         df_stim = df[~df['stimulus'].isin([21, 24])]
         df_stim = df_stim[np.logical_and(df_stim['dimension'] == 2, df_stim['ID'] == 100)]
         df_stim = df_stim.iloc[:,3:]
 
-        df_stim = pd.pivot_table(df_stim, index=[ 'stimulus'],aggfunc='first')
-        print(df_stim['AngularDisp'].value_counts())
-        print(df_stim['DiffType'].value_counts())
-
-
+        #df_stim = pd.pivot_table(df_stim, index=[ 'stimulus'],aggfunc='first')
+        #print(df_stim['AngularDisp'].value_counts())
+        #print(df_stim['DiffType'].value_counts())
 
         df = df[~df['stimulus'].isin([21,24])]
         df = df.drop(columns=['condition', 'stimulus', 'Response'])
         df_n = pd.pivot_table(df.iloc[:,:-3], index = ['ID','dimension'], aggfunc = 'mean')
         df_n = df_n.reset_index()
+
+        df_n.to_csv(data_path + '\\6_feature_dataset\\2023-06-17_feature_dataset_agg.csv')
 
         df_p = pd.read_csv(data_path + '\\1_questionnaire_preprocessed\\2023-06-12_preprocessed_questionnaire.csv')
         df_p = df_p[['ID', 'gender']]
@@ -94,6 +94,23 @@ class Statistics:
 
         dfx = df.drop(columns=['dimension'])
         df_a = pd.pivot_table(dfx.iloc[:, :-3], index=['ID'], aggfunc='mean')
+
+        source = df_a.copy()
+        source = source.drop(columns=['Correct', 'RT'])
+        fig = plt.figure(figsize=(10, 10))
+        corr_matrix = source.corr()
+        corr_matrix = corr_matrix.where(np.tril(np.ones(corr_matrix.shape),-1).astype(np.bool))
+        corr_matrix.columns = np.arange(1, len(corr_matrix)+1)
+        table = corr_matrix.to_latex(index=True,
+              formatters={"name": str.upper},
+              float_format="{:.2f}".format,
+              na_rep = '-')
+        print(table)
+        mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
+        sns.heatmap(corr_matrix, annot=True, mask=mask, cmap='vlag')
+        plt.tight_layout()
+        plt.show()
+
         df_a = df_a.merge(df_p, how='left', on='ID')
 
         df_male = df_a[df_a['gender']=='male']
