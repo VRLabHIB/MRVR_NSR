@@ -4,7 +4,9 @@ library(ggpubr)
 
 wd <- getwd()
 
-wd <- paste0(wd , '\\Promotion\\_Mental_Rotation\\03_MR_in_VR\\MRVR_NSR\\data\\6_feature_dataset\\')
+#wd <- paste0(wd , '\\Promotion\\_Mental_Rotation\\03_MR_in_VR\\MRVR_NSR\\data\\6_feature_dataset\\')
+
+wd <- paste0(wd ,'/GitHub/MRVR_NSR/data/6_feature_dataset/')
 
 df <- read.csv2(paste0(wd, '2023-06-17_feature_dataset_agg.csv'), sep =',')
 
