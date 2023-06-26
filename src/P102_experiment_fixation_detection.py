@@ -188,7 +188,7 @@ def run_IVT(df):
         df_f = df[df['gaze_label_number']==sac].copy()
         idx = df_f.index
         dur = (df_f['time'].iloc[-1]-df_f['time'].iloc[0])
-        if np.logical_or(dur <=0, dur > 0.8):
+        if np.logical_or(dur <=0, dur > 0.08):
             df['gaze_label'].loc[idx] = 'None'
 
 

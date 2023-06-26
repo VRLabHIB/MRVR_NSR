@@ -91,15 +91,24 @@ if __name__ == '__main__':
 
     ####################################################################################################################
     ## Statistical Analysis
-    stats = P301.Statistics(data_path)
+    #stats = P301.Statistics(data_path)
 
-    ### Preprocess questionnaire ###
-    ####################################################################################################################
-    #prep_quest = P201.Preprocessing(data_path)
-    #prep_quest.refactor_and_select_columns()
-    #prep_quest.save_dataframe()
+    # Adjust p-values
+    from statsmodels.stats import multitest
 
-    print('')
+    var = ['Mean fixation duration', 'Mean.regressive.fixation.duration', 'Equal.fixation.duration.between.figures',
+           'Equal.fixation.duration.within.figure','Strategy.ratio','Mean.saccade.duration', 'Mean saccade velocity',
+           'Mean.pupil.diameter', 'Pupil.diameter.amplitude','Mean.head.rotation', 'Mean.head.movement']
+    pvalsT = [0.2990102, 0.000000001356195,  0.0128448, 0.000000000000000000000000000001642871,
+              0.000000009310765, 0.8255286, 0.00000001520424, 0.0000000000006931733,
+              0.0000000000009913028, 0.000005181929, 0.00001861239]
+    pvalsW =[0.2630001, 0.00000006100603, 0.0225066,0.0000000001768897,
+             0.00000003406438, 0.8700507,0.000000541066, 0.000000002175876,
+             0.000000001347795,0.0000008813468, 0.000000005291752]
+    adj = multitest.multipletests(pvalsT, alpha=0.05, method='bonferroni', maxiter=1, is_sorted=False, returnsorted=False)
+    print(adj)
+
+
 
 
 
