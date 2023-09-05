@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
     IDs = df_f['ID'].unique()
 
+
+
     df = pd.read_csv(data_path + '2023-06-12_preprocessed_questionnaire.csv')
 
     df = df[df['ID'].isin(IDs)]

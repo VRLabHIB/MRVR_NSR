@@ -26,13 +26,14 @@ class Statistics:
         #print(df_stim['DiffType'].value_counts())
 
         df = df[~df['stimulus'].isin([21,24])]
+        df_new = df.copy()
         df = df.drop(columns=['condition', 'stimulus', 'Response'])
         df_n = pd.pivot_table(df.iloc[:,:-3], index = ['ID','dimension'], aggfunc = 'mean')
         df_n = df_n.reset_index()
 
         df_n.to_csv(data_path + '\\6_feature_dataset\\2023-06-17_feature_dataset_agg.csv')
 
-        df_p = pd.read_csv(data_path + '\\1_questionnaire_preprocessed\\2023-06-12_preprocessed_questionnaire.csv')
+        df_p = pd.read_csv(data_path + '\\1_questionnaire_preprocessed\\2023-06-26_preprocessed_questionnaire.csv')
         df_p = df_p[['ID', 'gender']]
 
         df_n = df_n.merge(df_p, how='left', on='ID')
@@ -109,7 +110,7 @@ class Statistics:
         mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
         sns.heatmap(corr_matrix, annot=True, mask=mask, cmap='vlag')
         plt.tight_layout()
-        plt.show()
+        # plt.show()
 
         df_a = df_a.merge(df_p, how='left', on='ID')
 
@@ -147,6 +148,22 @@ class Statistics:
         print('ttest Correct 3D')
         print(scipy.stats.ttest_ind(df_male3['Correct'].values, df_female3['Correct'].values))
 
+        #### Analysis for Revision
+
+        df_new = df_new.drop(columns=['stimulus', 'Response', 'Equal?'])
+        df_new['condition'] = df_new['condition'].map({'first':0, 'second':1})
+        df_ang = pd.pivot_table(df_new.iloc[:,:-1], index = ['ID','dimension', 'AngularDisp'], aggfunc = 'mean')
+
+        stats_angle = df_ang.groupby(['dimension', 'AngularDisp'])[['Correct', 'RT']].describe().round(3)
+
+
+        df_new = pd.pivot_table(df_new.iloc[:,:-2], index = ['ID','dimension'], aggfunc = 'mean')
+        df_new = df_new.reset_index()
+        #df_a = pd.pivot_table(df.iloc[:, :-3], index=['ID', 'dimension' ], aggfunc='mean')
+        stat = df_new.groupby(['dimension', 'condition'])[['Correct', 'RT']].describe().round(3)
+
+        df_new = df_new.merge(df_p, how='left', on='ID')
+        stat_gender = df_new.groupby(['dimension', 'condition'])['gender'].value_counts()
 
 
 

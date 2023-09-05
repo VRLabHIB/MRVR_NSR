@@ -8,7 +8,7 @@ import src.P102_experiment_fixation_detection as P102
 import src.P103_experiment_segment_detection as P103
 import src.P104_experiment_eye_feature_calculation as P104
 
-import src.P201_questionnaire_preprocessing_data as P201
+#import src.P201_questionnaire_preprocessing_data as P201
 
 import src.P301_data_analysis_statistics as P301
 
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
     ####################################################################################################################
     ## Statistical Analysis
-    #stats = P301.Statistics(data_path)
+    stats = P301.Statistics(data_path)
 
     # Adjust p-values
     from statsmodels.stats import multitest
