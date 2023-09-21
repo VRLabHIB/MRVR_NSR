@@ -142,6 +142,7 @@ if __name__ == '__main__':
 
     model = model_reader(result_path)
 
+    df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter"})
     columns = df.columns[7:-3]
     X_test = model[0]
     Y_test = model[1]
