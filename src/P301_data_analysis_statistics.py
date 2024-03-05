@@ -6,8 +6,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.stats import multitest
 
-from scipy.stats import shapiro, normaltest
-from scipy.stats import wilcoxon
+from scipy.stats import shapiro, normaltest, wilcoxon, median_abs_deviation
+
 
 class Statistics:
     def __init__(self, data_path):
@@ -55,15 +55,15 @@ class Statistics:
 
             print(col)
             Diff = dfw['{}_x'.format(col)].values - dfw['{}_y'.format(col)].values
-            stat, p = normaltest(Diff)
-            if p>0.05:
-                print('Gaussian')
-            if p<=0.05:
-                print('Not Gaussian')
-                print(p)
+            #stat, p = normaltest(Diff)
+            #if p>0.05:
+            #    print('Gaussian')
+            #if p<=0.05:
+            #    print('Not Gaussian')
+            #    print(p)
 
             stat, p = wilcoxon(dfw['{}_x'.format(col)].values, dfw['{}_y'.format(col)].values)
-            print('Statistics=%.3f, p=%.3f' % (stat, p))
+            #print('Statistics=%.3f, p=%.3f' % (stat, p))
 
             ttest = scipy.stats.ttest_rel(dfw['{}_x'.format(col)].values, dfw['{}_y'.format(col)].values)
             #print(ttest)
@@ -156,6 +156,10 @@ class Statistics:
 
         stats_angle = df_ang.groupby(['dimension', 'AngularDisp'])[['Correct', 'RT']].describe().round(3)
 
+        s1 = df_ang.groupby(['dimension', 'AngularDisp'])['RT'].transform('median')
+        s2 = df_ang['RT'].sub(s1).abs()
+
+        x = s2.groupby(['dimension', 'AngularDisp']).transform('median').round(3)
 
         df_new = pd.pivot_table(df_new.iloc[:,:-2], index = ['ID','dimension'], aggfunc = 'mean')
         df_new = df_new.reset_index()
@@ -168,8 +172,8 @@ class Statistics:
 
 
         #######
-        print(scipy.stats.ttest_rel(dfw['RT_x'].values, dfw['3DRT'].values))
-        print(scipy.stats.wilcoxon(dfw['2DRT'].values, dfw['3DRT'].values))
+        print(scipy.stats.ttest_rel(dfw['RT_x'].values, dfw['RT_y'].values))
+        print(scipy.stats.wilcoxon(dfw['RT_x'].values, dfw['RT_y'].values))
 
         Diff = dfw['2DRT'] - dfw['3DRT']
 

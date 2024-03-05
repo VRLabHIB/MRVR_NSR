@@ -182,7 +182,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
-          <line>170</line>
+          <line>174</line>
           <option name="timeStamp" value="147" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -217,13 +217,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
-          <line>162</line>
-          <option name="timeStamp" value="192" />
+          <line>177</line>
+          <option name="timeStamp" value="197" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
-          <line>159</line>
-          <option name="timeStamp" value="195" />
+          <line>175</line>
+          <option name="timeStamp" value="198" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
+          <line>83</line>
+          <option name="timeStamp" value="201" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
+          <line>95</line>
+          <option name="timeStamp" value="202" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/P301_data_analysis_statistics.py</url>
+          <line>75</line>
+          <option name="timeStamp" value="203" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
