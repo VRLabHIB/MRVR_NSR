@@ -65,6 +65,12 @@ class Statistics:
             stat, p = wilcoxon(dfw['{}_x'.format(col)].values, dfw['{}_y'.format(col)].values)
             #print('Statistics=%.3f, p=%.3f' % (stat, p))
 
+            from scipy.stats import ranksums
+            statistic, pvalue = ranksums(dfw['{}_x'.format(col)].values, dfw['{}_y'.format(col)].values)
+
+            # Print the results
+            print('Test statistic:', statistic)
+            print('p-value:', pvalue)
             ttest = scipy.stats.ttest_rel(dfw['{}_x'.format(col)].values, dfw['{}_y'.format(col)].values)
             #print(ttest)
             #t  = np.round(ttest[0], 3)
