@@ -84,7 +84,7 @@ from sklearn.metrics import confusion_matrix
 def model_writer(results_path, model):
     os.chdir(results_path)
 
-    with open(results_path + '/model.npy', 'wb') as f:
+    with open(results_path + '/model_new.npy', 'wb') as f:
         np.save(f, np.asarray(model[0]))  # X_test
         np.save(f, np.asarray(model[1]))  # Y_test
         np.save(f, np.asarray(model[2]))  # prediction
@@ -100,7 +100,7 @@ def model_writer(results_path, model):
 
 def model_reader(results_path):
     os.chdir(results_path)
-    with open(results_path + '/model.npy', 'rb') as f:
+    with open(results_path + '/model_new.npy', 'rb') as f:
         X_test = np.load(f)
         Y_test = np.load(f)
         prediction = np.load(f)
@@ -123,7 +123,8 @@ if __name__ == '__main__':
     data_path = project_path + '\\data\\6_feature_dataset\\'
     result_path = project_path + '\\results\\'
 
-    df = pd.read_csv(data_path + '2023-06-17_eye_features.csv')
+    df = pd.read_csv(data_path + '2024-03-11_final_feature_dataset.csv')
+    # df = pd.read_csv(data_path + '2023-06-17_eye_features.csv')
     df = df[~df['stimulus'].isin([21, 24])]
     print(len(df))
 
@@ -135,15 +136,19 @@ if __name__ == '__main__':
 
     df = df.reset_index(drop=True)
     #source = df.iloc[:, 7:-3]
-    #target = df[['dimension']].astype(int)
+    source = df.iloc[:, 7:]
+    source = source.drop(columns=['Equal?', 'AngularDisp', 'DiffType'])
+    target = df[['dimension']].astype(int)
 
-    #model = GBDT(source, target, n_iter=100, n_estimators=100)
+    model = GBDT(source, target, n_iter=100, n_estimators=100)
     #model_writer(result_path, model)
 
     model = model_reader(result_path)
 
     df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter"})
-    columns = df.columns[7:-3]
+    dfc = df.iloc[:, 7:]
+    dfc = dfc.drop(columns=['Equal?', 'AngularDisp', 'DiffType'])
+    columns = dfc.columns # df.columns[7:-3]
     X_test = model[0]
     Y_test = model[1]
     prediction = model[2]
@@ -193,7 +198,7 @@ if __name__ == '__main__':
 
     #plt.tight_layout()
     plt.show()
-    plt.savefig(result_path + 'shap_summary.jpg', dpi=100)  # bbox_inches='tight
+    plt.savefig(result_path + 'shap_summary_new.jpg', dpi=100)  # bbox_inches='tight
 
 
 

@@ -21,6 +21,88 @@ class Features:
         print("Number of files: ", len(self.data_lst))
         self.dataframes = [pd.read_csv(f, sep=',', header=0, index_col=False, low_memory=False) for f in self.data_lst]
 
+    def create_feature_dataset_count_measures(self):
+        ID_lst = list()
+        dim_lst = list()
+        cond_lst = list()
+        stim_lst = list()
+
+        n_fix_lst = list()
+        n_fix_per_sec_lst = list()
+        n_sacc_lst = list()
+        n_sacc_per_sec_lst = list()
+        ratio_mean_lst = list()
+        mean_fix_dur_lst = list()
+
+        for file in range(len(self.data_lst)):
+            stimuli = np.arange(1,31)
+            name = self.data_lst[file]
+            print(name)
+            df = self.dataframes[file]
+
+            ID = df['ID'].iloc[0]
+            dim = df['dimension'].iloc[0]
+            cond = df['cond'].iloc[0]
+
+            for stim in stimuli:
+                ratio_lst =list()
+                fix_dur_lst = list()
+
+                df_s = df[df['stimulus_ue']==str(stim)]
+                df_s['segment_part'] = df_s['segment_part'].replace(np.nan, 'None')
+                df_s['segment_arm'] = df_s['segment_arm'].replace(np.nan, 'None')
+
+                # Controller response and reaction time
+                RT = df_s['rel_time'].iloc[-1]
+
+                ID_lst.append(ID)
+                dim_lst.append(dim)
+                cond_lst.append(cond)
+                stim_lst.append(stim)
+
+                unique_gaze_labels = df_s['gaze_label_number'].unique()
+                fixations = [fix for fix in unique_gaze_labels if fix.startswith('fix')]
+
+                dfcount_fix = df_s[np.logical_and(df_s['ivt_gaze_labels'].isna(), df_s['idt_gaze_label'] == 'fixation')]
+                unique_gaze_labels_idt = dfcount_fix['gaze_label_number'].unique()
+                fixations_idt = [fix for fix in unique_gaze_labels_idt if fix.startswith('fix')]
+
+                for fix in fixations_idt:
+                    df_fix = df_s[df_s['gaze_label_number'] == fix]
+
+                    fix_dur = df_fix['label_duration'].iloc[0]
+
+                    fix_dur_lst.append(fix_dur)
+
+                mean_fix_dur_lst.append(np.nanmean(fix_dur_lst))
+
+                if int(dim)==3:
+                    try:
+                        ratio  = len(fixations_idt)/len(fixations)
+                        ratio_lst.append(ratio)
+                    except:
+                        ratio_lst.append(0)
+
+                n_fix_lst.append(len(fixations))
+                n_fix_per_sec_lst.append((len(fixations)/RT))
+
+                saccades = [sac for sac in unique_gaze_labels if sac.startswith('sac')]
+                n_sacc_lst.append(len(saccades))
+                n_sacc_per_sec_lst.append((len(saccades)/RT))
+
+            if int(dim)==3:
+                ratio_mean_lst.append(np.nanmean(ratio_lst))
+        mean_ratio = np.nanmean(ratio_lst)
+        sd_ratio = np.nanstd(ratio_lst)
+        self.df_feature = pd.DataFrame(
+            {'ID': ID_lst, 'dimension': dim_lst, 'condition': cond_lst, 'stimulus': stim_lst,
+             'Number of Fixations': n_fix_lst, 'Relative Number of Fixations': n_fix_per_sec_lst,
+             'Number of Saccades': n_sacc_lst, 'Relative Number of Saccades': n_sacc_per_sec_lst,
+             'Mean fixation duration during head movement': mean_fix_dur_lst
+             })
+        print(' ')
+
+
     def create_feature_dataset(self):
         ID_lst = list()
         dim_lst = list()

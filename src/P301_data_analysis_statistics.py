@@ -11,7 +11,7 @@ from scipy.stats import shapiro, normaltest, wilcoxon, median_abs_deviation
 
 class Statistics:
     def __init__(self, data_path):
-        df = pd.read_csv(data_path + '\\6_feature_dataset\\2023-06-17_eye_features.csv')
+        df = pd.read_csv(data_path + '\\6_feature_dataset\\2024-03-11_final_feature_dataset.csv')
 
         #df_cond = df[np.logical_and(df['dimension']==2, df['stimulus']==15)]
         #print('2D condition first')
@@ -26,12 +26,13 @@ class Statistics:
         #print(df_stim['DiffType'].value_counts())
 
         df = df[~df['stimulus'].isin([21,24])]
-        df_new = df.copy()
-        df = df.drop(columns=['condition', 'stimulus', 'Response'])
-        df_n = pd.pivot_table(df.iloc[:,:-3], index = ['ID','dimension'], aggfunc = 'mean')
+        #df_new = df.copy()
+        df = df.drop(columns=['condition', 'stimulus', 'Response','Equal?', 'AngularDisp', 'DiffType'])
+        #df_n = pd.pivot_table(df.iloc[:,:-3], index = ['ID','dimension'], aggfunc = 'mean')
+        df_n = pd.pivot_table(df, index=['ID', 'dimension'], aggfunc='mean') #new
         df_n = df_n.reset_index()
 
-        df_n.to_csv(data_path + '\\6_feature_dataset\\2023-06-17_feature_dataset_agg.csv')
+        df_n.to_csv(data_path + '\\6_feature_dataset\\2024-03-11_feature_dataset_agg.csv')
 
         df_p = pd.read_csv(data_path + '\\1_questionnaire_preprocessed\\2023-06-26_preprocessed_questionnaire.csv')
         df_p = df_p[['ID', 'gender']]
