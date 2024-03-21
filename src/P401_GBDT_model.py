@@ -84,7 +84,7 @@ from sklearn.metrics import confusion_matrix
 def model_writer(results_path, model):
     os.chdir(results_path)
 
-    with open(results_path + '/model_new.npy', 'wb') as f:
+    with open(results_path + '/model_new_new.npy', 'wb') as f:
         np.save(f, np.asarray(model[0]))  # X_test
         np.save(f, np.asarray(model[1]))  # Y_test
         np.save(f, np.asarray(model[2]))  # prediction
@@ -100,7 +100,7 @@ def model_writer(results_path, model):
 
 def model_reader(results_path):
     os.chdir(results_path)
-    with open(results_path + '/model_new.npy', 'rb') as f:
+    with open(results_path + '/model_new_new.npy', 'rb') as f:
         X_test = np.load(f)
         Y_test = np.load(f)
         prediction = np.load(f)
@@ -123,11 +123,12 @@ if __name__ == '__main__':
     data_path = project_path + '\\data\\6_feature_dataset\\'
     result_path = project_path + '\\results\\'
 
-    df = pd.read_csv(data_path + '2024-03-11_final_feature_dataset.csv')
+    df = pd.read_csv(data_path + '2024-03-21_final_feature_dataset.csv')
     # df = pd.read_csv(data_path + '2023-06-17_eye_features.csv')
     df = df[~df['stimulus'].isin([21, 24])]
     print(len(df))
 
+    df = df.drop(columns={'Number of Saccades', 'Number of Fixations', 'Mean angle around figure', 'Mean saccade duration'})
     df = df.dropna(axis = 'index', how = 'any', ignore_index = True)
     print(len(df))
 
@@ -140,12 +141,15 @@ if __name__ == '__main__':
     source = source.drop(columns=['Equal?', 'AngularDisp', 'DiffType'])
     target = df[['dimension']].astype(int)
 
-    model = GBDT(source, target, n_iter=100, n_estimators=100)
+    #model = GBDT(source, target, n_iter=100, n_estimators=100)
     #model_writer(result_path, model)
 
     model = model_reader(result_path)
 
-    df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter"})
+    df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter",
+                            'Relative Number of Fixations': 'Mean fixation rate',
+                            'Relative Number of Saccades': 'Mean saccade rate'
+                            })
     dfc = df.iloc[:, 7:]
     dfc = dfc.drop(columns=['Equal?', 'AngularDisp', 'DiffType'])
     columns = dfc.columns # df.columns[7:-3]
@@ -173,7 +177,7 @@ if __name__ == '__main__':
     matplotlib.rc('font', **font)
 
     #fig = plt.figure(figsize=(20, 15))
-    #mat = confusion_matrix(Y_test, prediction)
+    mat = confusion_matrix(Y_test, prediction)
     #sns.heatmap(data=mat.T, square=True, annot=True, fmt='d', cbar=False,
     #            xticklabels=["2D", "3D"],
     #            yticklabels=["2D", "3D"])

@@ -85,29 +85,58 @@ if __name__ == '__main__':
 
     ####################################################################################################################
     ## Calculate Feature
-    feature = P104.Features(data_path,project_path, location='\\5_experiment_segments_detected\\' )
+    #feature = P104.Features(data_path,project_path, location='\\5_experiment_segments_detected\\' )
     #feature.create_feature_dataset()
-    feature.create_feature_dataset_count_measures()
+    #feature.create_feature_dataset_count_measures()
     #feature.save_feature_dataset(data_path + '\\6_feature_dataset\\')
 
     ####################################################################################################################
     ## Statistical Analysis
-    stats = P301.Statistics(data_path)
+    #stats = P301.Statistics(data_path)
 
     # Adjust p-values
     from statsmodels.stats import multitest
 
-    var = ['Mean fixation duration', 'Mean.regressive.fixation.duration', 'Equal.fixation.duration.between.figures',
-           'Equal.fixation.duration.within.figure','Strategy.ratio','Mean.saccade.duration', 'Mean saccade velocity',
-           'Mean.pupil.diameter', 'Pupil.diameter.amplitude','Mean.head.rotation', 'Mean.head.movement']
-    pvalsT = [0.2990102, 0.000000001356195,  0.0128448, 0.000000000000000000000000000001642871,
-              0.000000009310765, 0.8255286, 0.00000001520424, 0.0000000000006931733,
-              0.0000000000009913028, 0.000005181929, 0.00001861239]
-    pvalsW =[0.2630001, 0.00000006100603, 0.0225066,0.0000000001768897,
-             0.00000003406438, 0.8700507,0.000000541066, 0.000000002175876,
-             0.000000001347795,0.0000008813468, 0.000000005291752]
-    adj = multitest.multipletests(pvalsT, alpha=0.05, method='bonferroni', maxiter=1, is_sorted=False, returnsorted=False)
-    print(adj)
+
+
+    var = ['Mean fixation duration', 'Mean fixation rate', 'Mean.regressive.fixation.duration', 'Equal.fixation.duration.between.figures',
+           'Equal.fixation.duration.within.figure','Strategy.ratio', 'Mean saccade velocity', 'Mean saccade rate',
+           'Mean.pupil.diameter', 'Pupil.diameter.amplitude','Mean.head.rotation', 'Mean.head.movement', 'Mean distance to figure']
+
+    df = pd.read_csv(data_path + '\\6_feature_dataset\\2024-03-21_final_feature_dataset.csv')
+    df = df[~df['stimulus'].isin([21, 24])]
+
+    vars2 = ['Mean fixation duration', 'Relative Number of Fixations', 'Mean regressive fixation duration',
+       'Equal fixation duration between figures',
+       'Equal fixation duration within figure',
+       'Mean saccade velocity','Relative Number of Saccades', 'Mean pupil diameter',
+       'Pupil diameter amplitude', 'Mean head rotation', 'Mean head movement',
+       'Strategy ratio', 'Mean distance to figure']
+    dfs = df[vars2]
+    dfs= dfs.rename(columns={'Pupil diameter amplitude':'Peak pupil diameter',
+                             'Relative Number of Fixations': 'Mean fixation rate',
+                             'Relative Number of Saccades':'Mean saccade rate'})
+
+    dfr = dfs.corr().round(3)
+    dfr = dfr.where(np.tril(np.ones(dfr.shape), k=-1).astype(np.bool))
+    dfr = dfr.round(3)
+    dfr = dfr.replace(np.nan, '-')
+    dfr = dfr.drop(columns='Mean distance to figure')
+    dfr.columns = np.arange(1, 13)
+    print(dfr.to_latex(float_format="{:0.2f}".format))
+
+    pvalsT = [0.2990102, 0.0379395,  0.000000001356195,  0.0128448, 0.000000000000000000000000000001642871,
+              0.000000009310765, 0.00000001520424, 0.0002637, 0.0000000000006931733,
+              0.0000000000009913028, 0.000005181929, 0.00001861239, 0.0039939]
+    pvalsW =[0.2630001, 0.0404394, 0.00000006100603, 0.0225066,0.0000000001768897,
+             0.00000003406438, 0.000000541066, 0.0005206, 0.000000002175876,
+             0.000000001347795,0.0000008813468, 0.000000005291752, 0.0000089]
+    adjT = multitest.multipletests(pvalsT, alpha=0.05, method='bonferroni', maxiter=1, is_sorted=False, returnsorted=False)
+    adjW = multitest.multipletests(pvalsW, alpha=0.05, method='bonferroni', maxiter=1, is_sorted=False,
+                                   returnsorted=False)
+    dfx = pd.DataFrame({'vars':var, 'pvalsT':adjT[1].round(3), 'pvalsW':adjW[1].round(3)})
+    print(dfx.to_latex())
+    print(adjT[1].round(3))
 
 
 

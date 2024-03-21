@@ -33,6 +33,11 @@ class Features:
         n_sacc_per_sec_lst = list()
         ratio_mean_lst = list()
         mean_fix_dur_lst = list()
+        mean_distance_to_figure_lst = list()
+        mean_angle_around_figure_lst = list()
+
+        figure_location = np.array([84, 5, 109])
+        player_start_position = np.array([-21, 5])
 
         for file in range(len(self.data_lst)):
             stimuli = np.arange(1,31)
@@ -60,6 +65,18 @@ class Features:
                 cond_lst.append(cond)
                 stim_lst.append(stim)
 
+                # distance to object
+                player_location = df_s[['playerlocationX', 'playerlocationY', 'playerlocationZ']].to_numpy()
+                distance_vector = player_location - figure_location
+                distance = np.linalg.norm(distance_vector, axis=1)
+                mean_distance_to_figure_lst.append(np.nanmean(distance))
+
+                # player circular rotation around the figure
+                alpha = np.abs(2 * np.degrees(np.sin(0.5 * (np.linalg.norm(player_start_position-player_location[:,:2],axis=1))
+                                            / np.linalg.norm(player_start_position-figure_location[:2]))))
+                mean_angle_around_figure_lst.append(np.nanmean(alpha))
+
+                #fixations
                 unique_gaze_labels = df_s['gaze_label_number'].unique()
                 fixations = [fix for fix in unique_gaze_labels if fix.startswith('fix')]
 
@@ -98,7 +115,9 @@ class Features:
             {'ID': ID_lst, 'dimension': dim_lst, 'condition': cond_lst, 'stimulus': stim_lst,
              'Number of Fixations': n_fix_lst, 'Relative Number of Fixations': n_fix_per_sec_lst,
              'Number of Saccades': n_sacc_lst, 'Relative Number of Saccades': n_sacc_per_sec_lst,
-             'Mean fixation duration during head movement': mean_fix_dur_lst
+             'Mean fixation duration during head movement': mean_fix_dur_lst,
+             'Mean distance to figure': mean_distance_to_figure_lst,
+             'Mean angle around figure':mean_angle_around_figure_lst
              })
         print(' ')
 
