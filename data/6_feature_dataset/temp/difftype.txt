@@ -1,0 +1,22 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+dimension & \multicolumn{3}{l}{2D} & \multicolumn{3}{l}{3D} \\
+DiffType &    Equal & Mirrored & Structural &    Equal & Mirrored & Structural \\
+\midrule
+Correct                                 &    0.835 &    0.837 &      0.815 &    0.929 &    0.829 &      0.844 \\
+RT                                      &    6.102 &    7.424 &      7.970 &    5.179 &    6.427 &      7.955 \\
+Mean fixation duration                  &    0.215 &    0.225 &      0.218 &    0.210 &    0.220 &      0.225 \\
+Mean fixation rate                      &    2.252 &    2.205 &      2.263 &    2.297 &    2.298 &      2.317 \\
+Mean regressive fixation duration       &    0.133 &    0.153 &      0.145 &    0.165 &    0.186 &      0.194 \\
+Equal fixation duration between figures &    0.687 &    0.694 &      0.718 &    0.704 &    0.715 &      0.783 \\
+Equal fixation duration within figure   &    0.162 &    0.222 &      0.196 &    0.457 &    0.424 &      0.473 \\
+Mean saccade velocity                   &  240.319 &  239.823 &    234.854 &  250.900 &  247.237 &    255.005 \\
+Mean saccade rate                       &    2.061 &    1.948 &      2.014 &    2.234 &    2.126 &      1.966 \\
+Mean pupil diameter                     &    0.029 &    0.036 &      0.070 &   -0.095 &   -0.111 &     -0.070 \\
+Pupil diameter amplitude                &    0.314 &    0.314 &      0.314 &    0.419 &    0.409 &      0.419 \\
+Mean head rotation                      &    1.650 &    1.650 &      1.769 &    2.897 &    2.122 &      2.322 \\
+Mean head movement                      &    0.507 &    0.538 &      0.523 &    1.365 &    0.970 &      1.025 \\
+Strategy ratio                          &    1.405 &    1.476 &      1.854 &    0.724 &    0.787 &      0.874 \\
+Mean distance to figure                 &   88.582 &   88.664 &     88.530 &   86.523 &   86.617 &     86.597 \\
+\bottomrule
+\end{tabular}
