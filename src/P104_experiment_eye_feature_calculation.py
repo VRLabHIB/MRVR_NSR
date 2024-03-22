@@ -31,7 +31,8 @@ class Features:
         n_fix_per_sec_lst = list()
         n_sacc_lst = list()
         n_sacc_per_sec_lst = list()
-        ratio_mean_lst = list()
+        ratio_mean_lst2 = list()
+        ratio_mean_lst3 = list()
         mean_fix_dur_lst = list()
         mean_distance_to_figure_lst = list()
         mean_angle_around_figure_lst = list()
@@ -50,7 +51,8 @@ class Features:
             cond = df['cond'].iloc[0]
 
             for stim in stimuli:
-                ratio_lst =list()
+                ratio_lst3 =list()
+                ratio_lst2 = list()
                 fix_dur_lst = list()
 
                 df_s = df[df['stimulus_ue']==str(stim)]
@@ -96,9 +98,16 @@ class Features:
                 if int(dim)==3:
                     try:
                         ratio  = len(fixations_idt)/len(fixations)
-                        ratio_lst.append(ratio)
+                        ratio_lst3.append(ratio)
                     except:
-                        ratio_lst.append(0)
+                        ratio_lst3.append(0)
+
+                if int(dim)==2:
+                    try:
+                        ratio  = len(fixations_idt)/len(fixations)
+                        ratio_lst2.append(ratio)
+                    except:
+                        ratio_lst2.append(0)
 
                 n_fix_lst.append(len(fixations))
                 n_fix_per_sec_lst.append((len(fixations)/RT))
@@ -108,9 +117,15 @@ class Features:
                 n_sacc_per_sec_lst.append((len(saccades)/RT))
 
             if int(dim)==3:
-                ratio_mean_lst.append(np.nanmean(ratio_lst))
-        mean_ratio = np.nanmean(ratio_lst)
-        sd_ratio = np.nanstd(ratio_lst)
+                ratio_mean_lst3.append(np.nanmean(ratio_lst3))
+            if int(dim)==2:
+                ratio_mean_lst2.append(np.nanmean(ratio_lst2))
+
+        mean_ratio2 = np.nanmean(ratio_mean_lst2)
+        sd_ratio2 = np.nanstd(ratio_mean_lst2)
+
+        mean_ratio3 = np.nanmean(ratio_mean_lst3)
+        sd_ratio3 = np.nanstd(ratio_mean_lst3)
         self.df_feature = pd.DataFrame(
             {'ID': ID_lst, 'dimension': dim_lst, 'condition': cond_lst, 'stimulus': stim_lst,
              'Number of Fixations': n_fix_lst, 'Relative Number of Fixations': n_fix_per_sec_lst,

@@ -1,0 +1,21 @@
+\begin{tabular}{llll}
+\toprule
+{} &                                 Feature &       2D (M \pm SD) &       3D (M \pm SD) \\
+\midrule
+0 &                                 Correct &     $0.832\pm0.105$ &     $0.882\pm0.101$ \\
+0 &                                      RT &     $6.861\pm3.583$ &     $6.076\pm3.214$ \\
+0 &                  Mean fixation duration &     $0.218\pm0.025$ &     $0.216\pm0.028$ \\
+0 &                      Mean fixation rate &     $2.016\pm0.466$ &     $2.151\pm0.451$ \\
+0 &       Mean regressive fixation duration &     $0.142\pm0.051$ &     $0.177\pm0.042$ \\
+0 &  Equal fixation duration between figure &     $0.695\pm0.086$ &     $0.721\pm0.079$ \\
+0 &  Equal fixation duration within figures &     $0.187\pm0.065$ &     $0.449\pm0.084$ \\
+0 &                          Strategy ratio &     $1.488\pm0.948$ &      $0.77\pm0.292$ \\
+0 &                   Mean saccade velocity &  $239.186\pm20.838$ &  $250.476\pm22.439$ \\
+0 &                      Mean saccades rate &     $2.016\pm0.466$ &     $2.151\pm0.451$ \\
+0 &                     Mean pupil diameter &     $0.039\pm0.095$ &    $-0.096\pm0.123$ \\
+0 &                     Peak pupil diameter &     $0.314\pm0.101$ &     $0.416\pm0.104$ \\
+0 &                      Mean head rotation &     $1.671\pm0.799$ &      $2.545\pm1.48$ \\
+0 &                      Mean head movement &      $0.52\pm0.189$ &     $1.177\pm1.079$ \\
+0 &                 Mean distance to figure &    $88.599\pm8.584$ &    $86.567\pm10.21$ \\
+\bottomrule
+\end{tabular}

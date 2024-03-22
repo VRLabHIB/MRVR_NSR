@@ -44,7 +44,7 @@
       <recent name="C:\Users\Stark\Documents\Promotion\_Mental_Rotation\03_MR_in_VR\MRVR_NSR" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.P401_GBDT_model">
+  <component name="RunManager" selected="Python.main">
     <configuration name="P401_GBDT_model" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="MRVR_NSR" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -242,7 +242,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/P104_experiment_eye_feature_calculation.py</url>
-          <line>121</line>
+          <line>136</line>
           <option name="timeStamp" value="228" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -256,19 +256,14 @@
           <option name="timeStamp" value="236" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>138</line>
-          <option name="timeStamp" value="241" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>127</line>
-          <option name="timeStamp" value="242" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/P401_GBDT_model.py</url>
-          <line>189</line>
-          <option name="timeStamp" value="244" />
+          <line>205</line>
+          <option name="timeStamp" value="245" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/P104_experiment_eye_feature_calculation.py</url>
+          <line>128</line>
+          <option name="timeStamp" value="246" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

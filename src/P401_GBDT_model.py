@@ -147,8 +147,8 @@ if __name__ == '__main__':
     model = model_reader(result_path)
 
     df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter",
-                            'Relative Number of Fixations': 'Mean fixation rate',
-                            'Relative Number of Saccades': 'Mean saccade rate'
+                            'Relative Number of Fixations': 'Fixation rate',
+                            'Relative Number of Saccades': 'Saccade rate'
                             })
     dfc = df.iloc[:, 7:]
     dfc = dfc.drop(columns=['Equal?', 'AngularDisp', 'DiffType'])
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     matplotlib.rc('font', **font)
 
     #fig = plt.figure(figsize=(20, 15))
-    mat = confusion_matrix(Y_test, prediction)
+    #mat = confusion_matrix(Y_test, prediction)
     #sns.heatmap(data=mat.T, square=True, annot=True, fmt='d', cbar=False,
     #            xticklabels=["2D", "3D"],
     #            yticklabels=["2D", "3D"])
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     #plt.savefig(result_path + 'confusion_matrix.jpg', dpi=500)  # bbox_inches='tight
     #plt.show()
 
-    fig = plt.figure(figsize=(12, 8))
+    fig = plt.figure(figsize=(14, 8))
     shap.initjs()
     shap.summary_plot(shap_value, X_test, feature_names=columns, plot_type='dot', plot_size=None, show=False)
     #w, _ = plt.gcf().get_size_inches()
@@ -200,9 +200,10 @@ if __name__ == '__main__':
     #ax = ax_list[0]
     #ax.set_xlabel('local shap values (left side= 2D; right side = 3D)', fontsize=20)
 
-    #plt.tight_layout()
+    plt.tight_layout()
     plt.show()
-    plt.savefig(result_path + 'shap_summary_new.jpg', dpi=100)  # bbox_inches='tight
+    fig.savefig(result_path + 'shap_summary_new.jpg', dpi=100)  # bbox_inches='tight
+    print (' ')
 
 
 
