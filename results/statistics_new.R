@@ -10,7 +10,7 @@ wd <- paste0(wd , '\\Promotion\\_Mental_Rotation\\03_MR_in_VR\\MRVR_NSR\\data\\6
 
 temp <- paste0(wd ,'temp\\')
 
-df <- read.csv2(paste0(wd, '2024-03-21_final_feature_dataset_agg.csv'), sep =',')
+df <- read.csv2(paste0(wd, '2024-03-25_final_feature_dataset_agg.csv'), sep =',')
 
 df$dimension = as.numeric(df$dimension)
 
@@ -60,8 +60,8 @@ c <- rbind(s2, s3)
 f <- rbind(f,c)
 
 #################
-var2 <- as.numeric(dfw$Mean.saccade.rate.2)
-var3 <- as.numeric(dfw$Mean.saccade.rate.3)
+var2 <- as.numeric(dfw$Mean.fixation.rate.2)
+var3 <- as.numeric(dfw$Mean.fixation.rate.3)
 
 s2 <- describe(var2)
 s2 <- cbind(Variable = "Mean fixation rate 2D", s2)
@@ -188,32 +188,32 @@ c <- rbind(s2, s3)
 f <- rbind(f,c)
 
 #################
-var2 <- as.numeric(dfw$Mean.head.rotation.2)
-var3 <- as.numeric(dfw$Mean.head.rotation.3)
+#var2 <- as.numeric(dfw$Mean.head.rotation.2)
+#var3 <- as.numeric(dfw$Mean.head.rotation.3)
 
-s2 <- describe(var2)
-s2 <- cbind(Variable = "Mean head rotation 2D", s2)
+#s2 <- describe(var2)
+#s2 <- cbind(Variable = "Mean head rotation 2D", s2)
 
-s3 <- describe(var3)
-s3 <- cbind(Variable = "Mean head rotation 3D", s3)
+#s3 <- describe(var3)
+#s3 <- cbind(Variable = "Mean head rotation 3D", s3)
 
-c <- rbind(s2, s3)
+#c <- rbind(s2, s3)
 
-f <- rbind(f,c)
+#f <- rbind(f,c)
 
 #################
-var2 <- as.numeric(dfw$Mean.head.movement.2)
-var3 <- as.numeric(dfw$Mean.head.movement.3)
+#var2 <- as.numeric(dfw$Mean.head.movement.2)
+#var3 <- as.numeric(dfw$Mean.head.movement.3)
 
-s2 <- describe(var2)
-s2 <- cbind(Variable = "Mean head movement 2D", s2)
+#s2 <- describe(var2)
+#s2 <- cbind(Variable = "Mean head movement 2D", s2)
 
-s3 <- describe(var3)
-s3 <- cbind(Variable = "Mean head movement 3D", s3)
+#s3 <- describe(var3)
+#s3 <- cbind(Variable = "Mean head movement 3D", s3)
 
-c <- rbind(s2, s3)
+#c <- rbind(s2, s3)
 
-f <- rbind(f,c)
+#f <- rbind(f,c)
 
 #################
 var2 <- as.numeric(dfw$Mean.distance.to.figure.2)
@@ -229,6 +229,20 @@ c <- rbind(s2, s3)
 
 f <- rbind(f,c)
 
+#################
+var2 <- as.numeric(dfw$Mean.horizontal.head.movement.2)
+var3 <- as.numeric(dfw$Mean.horizontal.head.movement.3)
+
+s2 <- describe(var2)
+s2 <- cbind(Variable = "Mean horizontal head movement 2D", s2)
+
+s3 <- describe(var3)
+s3 <- cbind(Variable = "Mean horizontal head movement 3D", s3)
+
+c <- rbind(s2, s3)
+
+f <- rbind(f,c)
+
 
 f <- f %>% 
   mutate_if(is.numeric, round, digits = 3)
@@ -236,7 +250,7 @@ f <- f %>%
 drop <- c('vars', 'n', 'trimmed', 'range' )
 ff <- f[,!(names(f) %in% drop)]
 
-write.csv(ff, paste0(temp , 'stat1.csv'))
+write.csv(ff, paste0(temp , 'stat11.csv'))
 
 #library(Hmisc)
 #latex(ff, file="", multicol=FALSE, rowlabel.just='l', rowname=NULL) 
@@ -285,7 +299,7 @@ for(col in cols[c(-1)]){
   
 }
   
-write.csv(x, paste0(temp, 'stat2.csv'))
+write.csv(x, paste0(temp, 'stat22.csv'))
 
 ####################################################################
 r <- results$ttest

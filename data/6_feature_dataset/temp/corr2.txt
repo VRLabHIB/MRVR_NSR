@@ -1,0 +1,18 @@
+\begin{tabular}{llllllllllll}
+\toprule
+{} &    1  &    2  &    3  &    4  &    5  &    6  &    7  &    8  &    9  &    10 &    11 \\
+\midrule
+1 Mean fixation duration                  &     - &     - &     - &     - &     - &     - &     - &     - &     - &     - &     - \\
+2 Mean fixation rate                      & -0.24 &     - &     - &     - &     - &     - &     - &     - &     - &     - &     - \\
+3 Mean regressive fixation duration       &  0.25 &  0.04 &     - &     - &     - &     - &     - &     - &     - &     - &     - \\
+4 Equal fixation duration between figures & -0.08 &  0.26 &  0.29 &     - &     - &     - &     - &     - &     - &     - &     - \\
+5 Equal fixation duration within figure   & -0.04 &  0.07 & -0.14 &  0.14 &     - &     - &     - &     - &     - &     - &     - \\
+6 Strategy ratio                          &  0.07 &  0.07 &  0.24 &  0.19 &  0.04 &     - &     - &     - &     - &     - &     - \\
+7 Mean saccade velocity                   & -0.06 &   0.1 & -0.03 &  0.04 &  0.03 &  -0.1 &     - &     - &     - &     - &     - \\
+8 Mean saccade rate                       & -0.41 & -0.04 & -0.23 & -0.11 & -0.01 & -0.35 & -0.05 &     - &     - &     - &     - \\
+9 Mean pupil diameter                     &  -0.0 &  0.02 &  0.05 &  0.03 &  0.01 &  0.09 &  0.03 & -0.04 &     - &     - &     - \\
+10 Peak pupil diameter                    &  0.09 & -0.08 &  0.02 & -0.02 & -0.04 & -0.01 & -0.04 & -0.07 & -0.01 &     - &     - \\
+11 Mean distance to figure                &  0.02 &  0.09 &  0.01 &  0.05 &  -0.0 &  0.02 & -0.23 & -0.02 & -0.12 &  -0.1 &     - \\
+12 Mean horizontal head movement          & -0.01 &  0.03 & -0.02 &  0.09 &  0.01 &  0.03 &  0.08 & -0.04 &  0.03 & -0.06 &  0.04 \\
+\bottomrule
+\end{tabular}

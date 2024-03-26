@@ -1,22 +1,34 @@
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{llll}
 \toprule
-dimension & \multicolumn{3}{l}{2D} & \multicolumn{3}{l}{3D} \\
-DiffType &    Equal & Mirrored & Structural &    Equal & Mirrored & Structural \\
+{} &              Equal &            Mirrored &          Structural \\
 \midrule
-Correct                                 &    0.835 &    0.837 &      0.815 &    0.929 &    0.829 &      0.844 \\
-RT                                      &    6.102 &    7.424 &      7.970 &    5.179 &    6.427 &      7.955 \\
-Mean fixation duration                  &    0.215 &    0.225 &      0.218 &    0.210 &    0.220 &      0.225 \\
-Mean fixation rate                      &    2.252 &    2.205 &      2.263 &    2.297 &    2.298 &      2.317 \\
-Mean regressive fixation duration       &    0.133 &    0.153 &      0.145 &    0.165 &    0.186 &      0.194 \\
-Equal fixation duration between figures &    0.687 &    0.694 &      0.718 &    0.704 &    0.715 &      0.783 \\
-Equal fixation duration within figure   &    0.162 &    0.222 &      0.196 &    0.457 &    0.424 &      0.473 \\
-Mean saccade velocity                   &  240.319 &  239.823 &    234.854 &  250.900 &  247.237 &    255.005 \\
-Mean saccade rate                       &    2.061 &    1.948 &      2.014 &    2.234 &    2.126 &      1.966 \\
-Mean pupil diameter                     &    0.029 &    0.036 &      0.070 &   -0.095 &   -0.111 &     -0.070 \\
-Pupil diameter amplitude                &    0.314 &    0.314 &      0.314 &    0.419 &    0.409 &      0.419 \\
-Mean head rotation                      &    1.650 &    1.650 &      1.769 &    2.897 &    2.122 &      2.322 \\
-Mean head movement                      &    0.507 &    0.538 &      0.523 &    1.365 &    0.970 &      1.025 \\
-Strategy ratio                          &    1.405 &    1.476 &      1.854 &    0.724 &    0.787 &      0.874 \\
-Mean distance to figure                 &   88.582 &   88.664 &     88.530 &   86.523 &   86.617 &     86.597 \\
+Correct 2D                                                                      &    $0.835\pm0.372$ &     $0.837\pm0.369$ &     $0.815\pm0.389$ \\
+Correct 3D                                                                      &    $0.929\pm0.258$ &     $0.829\pm0.377$ &     $0.844\pm0.363$ \\
+RT (s) 2D                                                                       &    $6.102\pm4.674$ &      $7.424\pm5.39$ &      $7.97\pm6.077$ \\
+RT (s) 3D                                                                       &    $5.179\pm3.801$ &     $6.427\pm4.913$ &     $7.955\pm6.712$ \\
+Mean fixation duration (s) 2D                                                   &    $0.215\pm0.046$ &     $0.225\pm0.046$ &     $0.218\pm0.046$ \\
+Mean fixation duration (s) 3D                                                   &     $0.21\pm0.047$ &      $0.22\pm0.048$ &     $0.225\pm0.047$ \\
+Mean fixation rate ($n/s$) 2D                                                   &    $2.252\pm0.507$ &     $2.205\pm0.485$ &     $2.263\pm0.473$ \\
+Mean fixation rate ($n/s$) 3D                                                   &    $2.297\pm0.613$ &     $2.298\pm0.547$ &     $2.317\pm0.484$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Mean regressive fixation duration (s)} 2D           &    $0.133\pm0.123$ &      $0.153\pm0.13$ &     $0.145\pm0.125$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Mean regressive fixation duration (s)} 3D           &    $0.165\pm0.118$ &     $0.186\pm0.119$ &     $0.194\pm0.109$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Equal fixation duration between figures (ratio)} 2D &    $0.687\pm0.234$ &     $0.694\pm0.216$ &     $0.718\pm0.212$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Equal fixation duration between figures (ratio)} 3D &    $0.704\pm0.226$ &     $0.715\pm0.206$ &     $0.783\pm0.171$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Equal fixation duration within figure (ratio)} 2D   &    $0.162\pm0.238$ &     $0.222\pm0.252$ &     $0.196\pm0.292$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Equal fixation duration within figure (ratio)} 3D   &     $0.457\pm0.25$ &     $0.424\pm0.256$ &     $0.473\pm0.236$ \\
+Strategy ratio ($\lessgtr 1$) 2D                                                &    $1.405\pm2.085$ &     $1.476\pm2.116$ &     $1.854\pm2.358$ \\
+Strategy ratio ($\lessgtr 1$) 3D                                                &    $0.724\pm0.699$ &     $0.787\pm0.651$ &     $0.874\pm0.669$ \\
+Mean saccade velocity ($\degree / s$) 2D                                        &  $240.319\pm34.66$ &  $239.823\pm35.348$ &  $234.854\pm34.467$ \\
+Mean saccade velocity ($\degree / s$) 3D                                        &   $250.9\pm37.714$ &  $247.237\pm35.435$ &  $255.005\pm36.977$ \\
+Mean saccade rate ($n/s$) 2D                                                    &    $2.061\pm0.691$ &     $1.948\pm0.688$ &      $2.014\pm0.68$ \\
+Mean saccade rate ($n/s$) 3D                                                    &    $2.234\pm0.684$ &     $2.126\pm0.708$ &     $1.966\pm0.638$ \\
+Mean pupil diameter (mm) 2D                                                     &    $0.029\pm0.147$ &     $0.036\pm0.152$ &      $0.07\pm0.166$ \\
+Mean pupil diameter (mm) 3D                                                     &   $-0.095\pm0.181$ &    $-0.111\pm0.173$ &     $-0.07\pm0.194$ \\
+Pupil diameter amplitude (mm) 2D                                                &    $0.314\pm0.137$ &     $0.314\pm0.135$ &      $0.314\pm0.13$ \\
+Pupil diameter amplitude (mm) 3D                                                &    $0.419\pm0.149$ &     $0.409\pm0.155$ &     $0.419\pm0.156$ \\
+Mean distance to figure (cm) 2D                                                 &   $88.582\pm8.548$ &    $88.664\pm8.531$ &     $88.53\pm8.547$ \\
+Mean distance to figure (cm) 3D                                                 &  $86.523\pm10.295$ &   $86.617\pm10.293$ &   $86.597\pm10.287$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Mean horizontal head movement (cm) 2D               &    $4.918\pm3.595$ &     $5.007\pm3.628$ &     $4.892\pm3.608$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Mean horizontal head movement (cm) 3D               &    $5.817\pm3.887$ &     $5.709\pm3.883$ &     $5.428\pm3.644$ \\
 \bottomrule
 \end{tabular}

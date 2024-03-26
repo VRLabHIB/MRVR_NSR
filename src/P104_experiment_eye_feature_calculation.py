@@ -36,6 +36,7 @@ class Features:
         mean_fix_dur_lst = list()
         mean_distance_to_figure_lst = list()
         mean_angle_around_figure_lst = list()
+        hori_mov_lst = list()
 
         figure_location = np.array([84, 5, 109])
         player_start_position = np.array([-21, 5])
@@ -77,6 +78,9 @@ class Features:
                 alpha = np.abs(2 * np.degrees(np.sin(0.5 * (np.linalg.norm(player_start_position-player_location[:,:2],axis=1))
                                             / np.linalg.norm(player_start_position-figure_location[:2]))))
                 mean_angle_around_figure_lst.append(np.nanmean(alpha))
+
+                hori_mov = np.abs(player_start_position[1]-player_location[:, 1])
+                hori_mov_lst.append(np.nanmean(hori_mov))
 
                 #fixations
                 unique_gaze_labels = df_s['gaze_label_number'].unique()
@@ -128,11 +132,12 @@ class Features:
         sd_ratio3 = np.nanstd(ratio_mean_lst3)
         self.df_feature = pd.DataFrame(
             {'ID': ID_lst, 'dimension': dim_lst, 'condition': cond_lst, 'stimulus': stim_lst,
-             'Number of Fixations': n_fix_lst, 'Relative Number of Fixations': n_fix_per_sec_lst,
-             'Number of Saccades': n_sacc_lst, 'Relative Number of Saccades': n_sacc_per_sec_lst,
+             'Number of Fixations': n_fix_lst, 'Mean fixation rate': n_fix_per_sec_lst,
+             'Number of Saccades': n_sacc_lst, 'Mean saccade rate': n_sacc_per_sec_lst,
              'Mean fixation duration during head movement': mean_fix_dur_lst,
              'Mean distance to figure': mean_distance_to_figure_lst,
-             'Mean angle around figure':mean_angle_around_figure_lst
+             'Mean angle around figure':mean_angle_around_figure_lst,
+             'Mean horizontal head movement': hori_mov_lst
              })
         print(' ')
 
@@ -357,9 +362,9 @@ class Features:
                 avg_sacc_dur_lst.append(np.nanmean(sacc_dur))
                 avg_sacc_velocity_lst.append(np.nanmean(sacc_velo))
 
-                ##################
-                #### Head Feat ###
-                ##################
+                #####################
+                #### Head Feature ###
+                #####################
                 # get head rotation velocity
                 head_rot_speed_lst.append(np.nanmean(df_s['head_angle_velo']))
 

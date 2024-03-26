@@ -1,0 +1,34 @@
+\begin{tabular}{llllll}
+\toprule
+{} &    Interaction &          Estimate &       Z &      P &            95\% CI \\
+\midrule
+Correct                                 &    3D:Mirrored &  $-0.094\pm0.028$ &  -3.353 &  0.001 &  $[-0.149,-0.039]$ \\
+                                        &  3D:Structural &  $-0.060\pm0.034$ &  -1.746 &  0.081 &   $[-0.127,0.007]$ \\
+RT                                      &    3D:Mirrored &  $-0.046\pm0.315$ &  -0.145 &  0.885 &   $[-0.664,0.573]$ \\
+                                        &  3D:Structural &   $0.877\pm0.384$ &   2.284 &  0.022 &    $[0.124,1.630]$ \\
+Mean_fixation_duration                  &    3D:Mirrored &   $0.001\pm0.003$ &   0.238 &  0.812 &   $[-0.006,0.007]$ \\
+                                        &  3D:Structural &   $0.011\pm0.004$ &   2.736 &  0.006 &    $[0.003,0.018]$ \\
+Mean_fixation_rate                      &    3D:Mirrored &   $0.066\pm0.037$ &   1.800 &  0.072 &   $[-0.006,0.138]$ \\
+                                        &  3D:Structural &   $0.014\pm0.045$ &   0.314 &  0.754 &   $[-0.074,0.102]$ \\
+Mean_regressive_fixation_duration       &    3D:Mirrored &   $0.004\pm0.009$ &   0.395 &  0.693 &   $[-0.015,0.022]$ \\
+                                        &  3D:Structural &   $0.017\pm0.012$ &   1.500 &  0.133 &   $[-0.005,0.040]$ \\
+Equal_fixation_duration_between_figures &    3D:Mirrored &   $0.016\pm0.016$ &   0.993 &  0.321 &   $[-0.016,0.049]$ \\
+                                        &  3D:Structural &   $0.051\pm0.020$ &   2.541 &  0.011 &    $[0.012,0.090]$ \\
+Equal_fixation_duration_within_figure   &    3D:Mirrored &  $-0.096\pm0.020$ &  -4.691 &  0.000 &  $[-0.136,-0.056]$ \\
+                                        &  3D:Structural &  $-0.021\pm0.025$ &  -0.865 &  0.387 &   $[-0.070,0.027]$ \\
+Strategy_ratio                          &    3D:Mirrored &  $-0.015\pm0.124$ &  -0.123 &  0.902 &   $[-0.257,0.227]$ \\
+                                        &  3D:Structural &  $-0.304\pm0.150$ &  -2.020 &  0.043 &  $[-0.599,-0.009]$ \\
+Mean_saccade_velocity                   &    3D:Mirrored &  $-3.398\pm2.441$ &  -1.392 &  0.164 &   $[-8.181,1.386]$ \\
+                                        &  3D:Structural &   $9.491\pm2.971$ &   3.194 &  0.001 &   $[3.668,15.315]$ \\
+Mean_saccade_rate                       &    3D:Mirrored &   $0.009\pm0.043$ &   0.200 &  0.841 &   $[-0.076,0.093]$ \\
+                                        &  3D:Structural &  $-0.213\pm0.052$ &  -4.083 &  0.000 &  $[-0.316,-0.111]$ \\
+Mean_pupil_diameter                     &    3D:Mirrored &  $-0.023\pm0.011$ &  -1.996 &  0.046 &  $[-0.045,-0.000]$ \\
+                                        &  3D:Structural &  $-0.015\pm0.014$ &  -1.080 &  0.280 &   $[-0.042,0.012]$ \\
+Pupil_diameter_amplitude                &    3D:Mirrored &  $-0.008\pm0.009$ &  -0.892 &  0.372 &   $[-0.026,0.010]$ \\
+                                        &  3D:Structural &  $-0.001\pm0.011$ &  -0.101 &  0.920 &   $[-0.023,0.021]$ \\
+Mean_distance_to_figure                 &    3D:Mirrored &   $0.008\pm0.234$ &   0.034 &  0.973 &   $[-0.450,0.466]$ \\
+                                        &  3D:Structural &   $0.083\pm0.284$ &   0.293 &  0.769 &   $[-0.474,0.641]$ \\
+Mean_horizontal_head_movement           &    3D:Mirrored &  $-0.177\pm0.128$ &  -1.380 &  0.167 &   $[-0.427,0.074]$ \\
+                                        &  3D:Structural &  $-0.332\pm0.156$ &  -2.134 &  0.033 &  $[-0.638,-0.027]$ \\
+\bottomrule
+\end{tabular}

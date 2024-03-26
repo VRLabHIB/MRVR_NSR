@@ -1,0 +1,48 @@
+\begin{tabular}{llllll}
+\toprule
+{} &               Interaction &          Estimate &       Z &      P &            95\% CI \\
+\midrule
+Percentage solved correctly                                                  &       3D:(Mirrored-Equal) &  $-0.094\pm0.028$ &  -3.353 &  0.001 &  $[-0.149,-0.039]$ \\
+                                                                             &     3D:(Structural-Equal) &  $-0.060\pm0.034$ &  -1.746 &  0.081 &   $[-0.127,0.007]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.034\pm0.037$ &   0.943 &  0.346 &   $[-0.037,0.106]$ \\
+RT (s)                                                                       &       3D:(Mirrored-Equal) &  $-0.046\pm0.315$ &  -0.145 &  0.885 &   $[-0.664,0.573]$ \\
+                                                                             &     3D:(Structural-Equal) &   $0.877\pm0.384$ &   2.284 &  0.022 &    $[0.124,1.630]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.923\pm0.411$ &   2.246 &  0.025 &    $[0.118,1.728]$ \\
+Mean fixation duration (s)                                                   &       3D:(Mirrored-Equal) &   $0.001\pm0.003$ &   0.238 &  0.812 &   $[-0.006,0.007]$ \\
+                                                                             &     3D:(Structural-Equal) &   $0.011\pm0.004$ &   2.736 &  0.006 &    $[0.003,0.018]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.010\pm0.004$ &   2.374 &  0.018 &    $[0.002,0.018]$ \\
+Mean fixation rate ($n/s$)                                                   &       3D:(Mirrored-Equal) &   $0.066\pm0.037$ &   1.800 &  0.072 &   $[-0.006,0.138]$ \\
+                                                                             &     3D:(Structural-Equal) &   $0.014\pm0.045$ &   0.314 &  0.754 &   $[-0.074,0.102]$ \\
+                                                                             &  3D:(Structural-Mirrored) &  $-0.052\pm0.048$ &  -1.089 &  0.276 &   $[-0.146,0.042]$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Mean regressive fixation duration (s)}           &       3D:(Mirrored-Equal) &   $0.004\pm0.009$ &   0.395 &  0.693 &   $[-0.015,0.022]$ \\
+                                                                             &     3D:(Structural-Equal) &   $0.017\pm0.012$ &   1.500 &  0.133 &   $[-0.005,0.040]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.014\pm0.012$ &   1.100 &  0.271 &   $[-0.011,0.038]$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Equal fixation duration between figures (ratio)} &       3D:(Mirrored-Equal) &   $0.016\pm0.016$ &   0.993 &  0.321 &   $[-0.016,0.049]$ \\
+                                                                             &     3D:(Structural-Equal) &   $0.051\pm0.020$ &   2.541 &  0.011 &    $[0.012,0.090]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.035\pm0.021$ &   1.613 &  0.107 &   $[-0.007,0.077]$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Equal fixation duration within figure (ratio)}   &       3D:(Mirrored-Equal) &  $-0.096\pm0.020$ &  -4.691 &  0.000 &  $[-0.136,-0.056]$ \\
+                                                                             &     3D:(Structural-Equal) &  $-0.021\pm0.025$ &  -0.865 &  0.387 &   $[-0.070,0.027]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.074\pm0.027$ &   2.794 &  0.005 &    $[0.022,0.126]$ \\
+Strategy ratio ($\lessgtr 1$)                                                &       3D:(Mirrored-Equal) &  $-0.015\pm0.124$ &  -0.123 &  0.902 &   $[-0.257,0.227]$ \\
+                                                                             &     3D:(Structural-Equal) &  $-0.304\pm0.150$ &  -2.020 &  0.043 &  $[-0.599,-0.009]$ \\
+                                                                             &  3D:(Structural-Mirrored) &  $-0.289\pm0.161$ &  -1.794 &  0.073 &   $[-0.604,0.027]$ \\
+Mean saccade velocity ($\degree / s$)                                        &       3D:(Mirrored-Equal) &  $-3.398\pm2.441$ &  -1.392 &  0.164 &   $[-8.181,1.386]$ \\
+                                                                             &     3D:(Structural-Equal) &   $9.491\pm2.971$ &   3.194 &  0.001 &   $[3.668,15.315]$ \\
+                                                                             &  3D:(Structural-Mirrored) &  $12.889\pm3.179$ &   4.055 &  0.000 &   $[6.659,19.119]$ \\
+Mean saccade rate ($n/s$)                                                    &       3D:(Mirrored-Equal) &   $0.009\pm0.043$ &   0.200 &  0.841 &   $[-0.076,0.093]$ \\
+                                                                             &     3D:(Structural-Equal) &  $-0.213\pm0.052$ &  -4.083 &  0.000 &  $[-0.316,-0.111]$ \\
+                                                                             &  3D:(Structural-Mirrored) &  $-0.222\pm0.056$ &  -3.971 &  0.000 &  $[-0.332,-0.112]$ \\
+Mean pupil diameter (mm)                                                     &       3D:(Mirrored-Equal) &  $-0.023\pm0.011$ &  -1.996 &  0.046 &  $[-0.045,-0.000]$ \\
+                                                                             &     3D:(Structural-Equal) &  $-0.015\pm0.014$ &  -1.080 &  0.280 &   $[-0.042,0.012]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.008\pm0.015$ &   0.523 &  0.601 &   $[-0.021,0.037]$ \\
+Pupil diameter amplitude (mm)                                                &       3D:(Mirrored-Equal) &  $-0.008\pm0.009$ &  -0.892 &  0.372 &   $[-0.026,0.010]$ \\
+                                                                             &     3D:(Structural-Equal) &  $-0.001\pm0.011$ &  -0.101 &  0.920 &   $[-0.023,0.021]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.007\pm0.012$ &   0.591 &  0.555 &   $[-0.016,0.030]$ \\
+Mean distance to figure (cm)                                                 &       3D:(Mirrored-Equal) &   $0.008\pm0.234$ &   0.034 &  0.973 &   $[-0.450,0.466]$ \\
+                                                                             &     3D:(Structural-Equal) &   $0.083\pm0.284$ &   0.293 &  0.769 &   $[-0.474,0.641]$ \\
+                                                                             &  3D:(Structural-Mirrored) &   $0.075\pm0.304$ &   0.248 &  0.804 &   $[-0.521,0.672]$ \\
+\parbox[t][0.8cm][t]{3.4cm}{Mean horizontal head movement (cm)}              &       3D:(Mirrored-Equal) &  $-0.177\pm0.128$ &  -1.380 &  0.167 &   $[-0.427,0.074]$ \\
+                                                                             &     3D:(Structural-Equal) &  $-0.332\pm0.156$ &  -2.134 &  0.033 &  $[-0.638,-0.027]$ \\
+                                                                             &  3D:(Structural-Mirrored) &  $-0.156\pm0.167$ &  -0.935 &  0.350 &   $[-0.482,0.171]$ \\
+\bottomrule
+\end{tabular}

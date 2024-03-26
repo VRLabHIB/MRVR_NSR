@@ -84,7 +84,7 @@ from sklearn.metrics import confusion_matrix
 def model_writer(results_path, model):
     os.chdir(results_path)
 
-    with open(results_path + '/model_new_new.npy', 'wb') as f:
+    with open(results_path + '/model_new_new_new.npy', 'wb') as f:
         np.save(f, np.asarray(model[0]))  # X_test
         np.save(f, np.asarray(model[1]))  # Y_test
         np.save(f, np.asarray(model[2]))  # prediction
@@ -100,7 +100,7 @@ def model_writer(results_path, model):
 
 def model_reader(results_path):
     os.chdir(results_path)
-    with open(results_path + '/model_new_new.npy', 'rb') as f:
+    with open(results_path + '/model_new_new_new.npy', 'rb') as f:
         X_test = np.load(f)
         Y_test = np.load(f)
         prediction = np.load(f)
@@ -123,12 +123,13 @@ if __name__ == '__main__':
     data_path = project_path + '\\data\\6_feature_dataset\\'
     result_path = project_path + '\\results\\'
 
-    df = pd.read_csv(data_path + '2024-03-21_final_feature_dataset.csv')
+    df = pd.read_csv(data_path + '2024-03-25_final_feature_dataset.csv')
     # df = pd.read_csv(data_path + '2023-06-17_eye_features.csv')
     df = df[~df['stimulus'].isin([21, 24])]
     print(len(df))
 
-    df = df.drop(columns={'Number of Saccades', 'Number of Fixations', 'Mean angle around figure', 'Mean saccade duration'})
+    df = df.drop(columns={'Number of Saccades', 'Number of Fixations', 'Mean angle around figure', 'Mean saccade duration',
+                          'Mean head rotation', 'Mean head movement'})
     df = df.dropna(axis = 'index', how = 'any', ignore_index = True)
     print(len(df))
 
@@ -146,10 +147,7 @@ if __name__ == '__main__':
 
     model = model_reader(result_path)
 
-    df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter",
-                            'Relative Number of Fixations': 'Fixation rate',
-                            'Relative Number of Saccades': 'Saccade rate'
-                            })
+    df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter"})
     dfc = df.iloc[:, 7:]
     dfc = dfc.drop(columns=['Equal?', 'AngularDisp', 'DiffType'])
     columns = dfc.columns # df.columns[7:-3]
@@ -177,7 +175,7 @@ if __name__ == '__main__':
     matplotlib.rc('font', **font)
 
     #fig = plt.figure(figsize=(20, 15))
-    #mat = confusion_matrix(Y_test, prediction)
+    mat = confusion_matrix(Y_test, prediction)
     #sns.heatmap(data=mat.T, square=True, annot=True, fmt='d', cbar=False,
     #            xticklabels=["2D", "3D"],
     #            yticklabels=["2D", "3D"])
@@ -202,7 +200,7 @@ if __name__ == '__main__':
 
     plt.tight_layout()
     plt.show()
-    fig.savefig(result_path + 'shap_summary_new.jpg', dpi=100)  # bbox_inches='tight
+    fig.savefig(result_path + 'shap_summary_new_new.jpg', dpi=100)  # bbox_inches='tight
     print (' ')
 
 
