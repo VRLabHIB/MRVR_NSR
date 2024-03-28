@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     model = model_reader(result_path)
 
-    df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter"})
+    df = df.rename(columns={'Pupil diameter amplitude':"Peak pupil diameter", "Mean horizontal head movement": "Mean head movement to the sides"})
     dfc = df.iloc[:, 7:]
     dfc = dfc.drop(columns=['Equal?', 'AngularDisp', 'DiffType'])
     columns = dfc.columns # df.columns[7:-3]
