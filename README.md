@@ -1,6 +1,6 @@
 # MRVR_NSR
 
-**This repository shows the code for the study: Stark et al., 2024. The impact of presentation modes on mental rotation processing: a comparative analysis of eye movements and performance. *Scientific Reports * https://doi.org/10.1038/s41598-024-60370-6 **. If you use parts of our work, we would be very happy to be cited in your article.
+This repository shows the code for the study: **Stark et al., 2024. The impact of presentation modes on mental rotation processing: a comparative analysis of eye movements and performance.** *Scientific Reports * **https://doi.org/10.1038/s41598-024-60370-6**. If you use parts of our work, we would be very happy to be cited in your article.
  
 ## \data
 **0_raw_experiment** experiement data data was 
