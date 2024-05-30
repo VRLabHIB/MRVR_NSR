@@ -1,5 +1,6 @@
 # MRVR_NSR
- 
+
+**This repository shows the code for the study: Stark et al., 2024. The impact of presentation modes on mental rotation processing: a comparative analysis of eye movements and performance. *Scientific Reports * https://doi.org/10.1038/s41598-024-60370-6 **. If you use parts of our work, we would be very happy to be cited in your article.
  
 ## \data
 **0_raw_experiment** experiement data data was 
@@ -91,12 +92,6 @@ To calculate features that required information gaze position on the figure, we 
 
 - In the dataset from socey survey, we had 88 participants who filled out the questionnaire data. 22 questionnaires were from piloting the VR experiment and piloting the survey before the start of the valid experiment.
 - 66 valid participants remained. 
-
-# Results
-
-- The results from comparing the 2D (M = , SD = ) and 3D (M = , SD = ) condition indicate an decrease in reaction time for the 3D condition 
-
-- of the 54 participants 31 (57%) started with the 2D condition and 23 (43%) started with the 3D condition. 
 
 
 
